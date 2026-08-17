@@ -2,51 +2,48 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import os
-import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
 
-st.set_page_config(page_title="Restaurant Inventory & Chain Management System", layout="wide")
+# --- CẤU HÌNH GIAO DIỆN & CSS (Tích hợp phong cách HTML/CSS mẫu) ---
+st.set_page_config(page_title="Hệ Thống Quản Lý Kho & Chuỗi Nhà Hàng", layout="wide")
 
-# --- TÙY CHỈNH GIAO DIỆN BẰNG CSS ---
 st.markdown("""
     <style>
     .stApp {
-        background-color: #f7f9fa;
+        background-color: #f4f6f9;
     }
     [data-testid="stSidebar"] {
-        background-color: #b4cfdc;
-        border-right: 1px solid #90bcd5;
+        background-color: #e6ecf5;
+        border-right: 1px solid #ccc;
+        padding-top: 10px;
     }
     [data-testid="stSidebar"] h1, [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3, [data-testid="stSidebar"] span, [data-testid="stSidebar"] label {
-        color: #1e293b !important;
+        color: #2c3e50 !important;
     }
-    div.stButton > button:first-child, div.stFormSubmitButton > button:first-child {
-        background-color: #bed650 !important;
-        color: #1e293b !important;
-        font-weight: bold;
-        border: 1px solid #a8c238;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        transition: all 0.3s ease;
+    /* Nút đăng xuất tùy chỉnh giống phong cách template HTML (.logout-btn) */
+    div.stButton > button:first-child {
+        background-color: #5cb85c !important;
+        color: white !important;
+        font-weight: normal;
+        border: none;
+        padding: 8px 16px;
+        font-size: 14px;
+        border-radius: 4px;
+        box-shadow: none;
+        cursor: pointer;
     }
-    div.stButton > button:first-child:hover, div.stFormSubmitButton > button:first-child:hover {
-        background-color: #a8c238 !important;
-        border-color: #96af29;
-    }
-    .stTextInput input, .stSelectbox select, .stNumberInput input {
-        border-color: #90bcd5 !important;
-        border-radius: 6px;
+    div.stButton > button:first-child:hover {
+        background-color: #4cae4c !important;
     }
     h1 {
         color: #2c3e50;
     }
     .stAlert {
-        border-radius: 8px;
+        border-radius: 4px;
     }
     </style>
 """, unsafe_allow_html=True)
 
+# --- CÁC TỆP DỮ LIỆU ---
 DATA_FILE = "restaurant_inventory_data.xlsx"
 BRANCH_DATA_FILE = "branch_inventory_data.xlsx"
 EXPORT_FILE = "branch_export_history.csv"
@@ -56,7 +53,9 @@ BRANCH_PROC_FILE = "branch_processing_history.csv"
 SECRET_ACTION_PWD = "264221"
 
 BRANCH_LIST = ["Shibuya", "Little Geisha Baross", "Little Geisha Corvin", "URBN.Station", "Matchy"]
+UNIT_LIST = ["Kg", "g", "L", "ml", "Can", "Chai", "Thùng", "Gói", "Hộp", "Cái"]
 
+# Khởi tạo mật khẩu hệ thống
 if "passwords" not in st.session_state:
     st.session_state.passwords = {
         "nuonuo": "264221",
@@ -69,10 +68,11 @@ if "passwords" not in st.session_state:
         "matchy": "matchy2026"
     }
 
+# --- BẢN ĐỊNH NGHĨA NGÔN NGỮ ---
 LANG = {
     "vi": {
         "login_title": "Đăng Nhập Hệ Thống Quản Lý Kho & Chuỗi Nhà Hàng",
-        "login_desc": "Vui lòng chọn ngôn ngữ, nhập **ID tài khoản** và **Mật khẩu** của bạn để tiếp tục.",
+        "login_desc": "Vui lòng nhập **ID tài khoản** và **Mật khẩu** của bạn để tiếp tục.",
         "id_label": "ID tài khoản (Admin hoặc Chi nhánh):",
         "pwd_label": "Mật khẩu:",
         "btn_login": "Đăng Nhập",
@@ -92,64 +92,21 @@ LANG = {
         "low_stock_warn": "Cảnh báo tồn kho thấp",
         "total_branches": "Tổng số chi nhánh hoạt động",
         "main_stock_table": "Bảng Tồn Kho Kho Tổng (Main Stock)",
-        "guide_content": """### Hướng Dẫn Sử Dụng Hệ Thống
-* **Quản trị viên (Admin):** Toàn quyền quản lý kho tổng, kho chi nhánh, nhập hàng, thêm sản phẩm, duyệt đơn và phân bổ cấp hàng.
-* **Chi nhánh (Branch):** Quản lý kho nội bộ riêng, tự thêm sản phẩm mua ngoài, sơ chế hao hụt, chuyển hàng nội bộ và đặt hàng từ kho tổng."""
-    },
-    "en": {
-        "login_title": "Restaurant Inventory & Chain Management Login",
-        "login_desc": "Please select your language, enter your **Account ID** and **Password** to continue.",
-        "id_label": "Account ID (Admin or Branch):",
-        "pwd_label": "Password:",
-        "btn_login": "Log In",
-        "title": "Restaurant Inventory & Chain Management System",
-        "menu": "System Menu",
-        "m_overview": "Overview & Stock Alerts",
-        "m_import": "Main Stock Import",
-        "m_edit": "Edit Opening Stock",
-        "m_add": "Add New Item",
-        "m_process": "Processing Log",
-        "m_distribute": "Branch Distribution",
-        "m_branch_inv": "Branch Local Inventory",
-        "m_transfer": "Inter-branch Transfer",
-        "m_order": "Branch Order Request",
-        "m_guide": "User Guide",
-        "total_items": "Total Items",
-        "low_stock_warn": "Low Stock Alerts",
-        "total_branches": "Active Branches",
-        "main_stock_table": "Main Inventory Stock Table",
-        "guide_content": """### User Guide
-* **Administrator (Admin):** Full control over main stock, branch inventories, imports, and distribution.
-* **Branch:** Manage local inventory, add local items, branch processing/waste log, internal transfers, and place orders."""
-    },
-    "hu": {
-        "login_title": "Éttermi Készletkezelő Bejelentkezés",
-        "login_desc": "Kérjük, adja meg a fiókazonosítót és a jelszót.",
-        "id_label": "Fiók azonosító:",
-        "pwd_label": "Jelszó:",
-        "btn_login": "Bejelentkezés",
-        "title": "Éttermi Készletkezelő és Lánc Rendszer",
-        "menu": "Rendszer Menü",
-        "m_overview": "Áttekintés és Készletriasztások",
-        "m_import": "Központi Készlet Bevételezés",
-        "m_edit": "Nyitókészlet Szerkesztése",
-        "m_add": "Új Termék Hozzáadása",
-        "m_process": "Feldolgozási Napló",
-        "m_distribute": "Kiosztás Egységeknek",
-        "m_branch_inv": "Egységek Saját Készlete",
-        "m_transfer": "Egységek közötti átadás",
-        "m_order": "Egységek Rendelése a Központból",
-        "m_guide": "Használati Útmutató",
-        "total_items": "Összes termék",
-        "low_stock_warn": "Alacsony készlet riasztás",
-        "total_branches": "Aktív egységek",
-        "main_stock_table": "Központi Készlet Táblázat",
-        "guide_content": """### Használati Útmutató
-* **Rendszergazda (Admin):** Teljes körű vezérlés a központi raktár, fiókkészletek és kiosztások felett.
-* **Egység (Branch):** Saját helyi készlet kezelése, saját tételek, feldolgozási és hulladék napló, belső átadások és rendelések."""
+        "guide_content": """### Hướng Dẫn Sử Dụng Chi Tiết Từng Chức Năng
+* **Tổng Quan & Cảnh Báo Kho:** Xem báo cáo tổng hợp tình trạng tồn kho hiện tại, các mặt hàng sắp hết hạn hoặc sắp hết số lượng để có kế hoạch xử lý kịp thời.
+* **Nhập Hàng Kho Tổng:** Ghi nhận số lượng hàng hóa mới nhập vào kho tổng từ nhà cung cấp, cập nhật mã sản phẩm, số lượng và đơn giá.
+* **Sửa Tồn Kho Đầu Kỳ:** Cho phép điều chỉnh lại số liệu tồn kho ban đầu khi bắt đầu kỳ kế toán hoặc kiểm kê lại từ đầu.
+* **Thêm Sản Phẩm Mới:** Khai báo mã sản phẩm mới, tên sản phẩm, danh mục, đơn vị tính và thông tin cơ bản lên hệ thống.
+* **Sơ Chế & Hao Hụt:** Quản lý quy trình sơ chế nguyên liệu (chuyển đổi từ nguyên liệu thô sang thành phẩm sơ chế) và ghi nhận tỷ lệ hao hụt thực tế.
+* **Cấp Hàng Cho Chi Nhánh:** Tạo phiếu xuất kho và phân bổ hàng hóa từ kho tổng xuống cho các chi nhánh trực thuộc.
+* **Kho Riêng Chi Nhánh:** Theo dõi chi tiết tình trạng tồn kho thực tế nằm tại từng chi nhánh riêng biệt.
+* **Chuyển Hàng Giữa Chi Nhánh:** Lập lệnh điều chuyển hàng hóa qua lại giữa các chi nhánh khi nơi này thừa và nơi kia thiếu.
+* **Chi Nhánh Đặt Hàng Kho Tổng:** Giao diện để các chi nhánh gửi yêu cầu đặt hàng mới lên kho tổng dựa trên nhu cầu thực tế.
+* **Hướng Dẫn Sử Dụng:** Khu vực hiển thị tài liệu, quy trình thao tác chuẩn (SOP) cho nhân viên vận hành hệ thống."""
     }
 }
 
+# Khởi tạo session state
 if "logged_in" not in st.session_state:
     st.session_state.logged_in = False
 if "role" not in st.session_state:
@@ -163,11 +120,10 @@ if "dist_rows_count" not in st.session_state:
 if "transfer_rows_count" not in st.session_state:
     st.session_state.transfer_rows_count = 1
 
-if not st.session_state.logged_in:
-    login_lang_choice = st.selectbox("Chọn ngôn ngữ / Language / Nyelv:", ["Tiếng Việt", "English", "Magyar"], index=0)
-    login_lang_key = "vi" if login_lang_choice == "Tiếng Việt" else ("en" if login_lang_choice == "English" else "hu")
-    TL = LANG[login_lang_key]
+TL = LANG["vi"]
 
+# --- MÀN HÌNH ĐĂNG NHẬP ---
+if not st.session_state.logged_in:
     st.title(TL["login_title"])
     st.markdown(TL["login_desc"])
     
@@ -193,13 +149,13 @@ if not st.session_state.logged_in:
                         "matchy": "Matchy"
                     }
                     st.session_state.branch_name = branch_names_map.get(clean_id, clean_id)
-                st.session_state.lang_key = login_lang_key
-                st.success("Đăng nhập thành công / Login successful!")
+                st.success("Đăng nhập thành công!")
                 st.rerun()
             else:
-                st.error("Sai ID hoặc mật khẩu! / Incorrect ID or Password!")
+                st.error("Sai ID hoặc mật khẩu!")
     st.stop()
 
+# --- HÀM TẢI VÀ LƯU DỮ LIỆU ---
 def load_data():
     if os.path.exists(DATA_FILE):
         try:
@@ -243,6 +199,7 @@ def save_branch_data(branch_data):
         for b, df in branch_data.items():
             df.to_excel(writer, sheet_name=b, index=False)
 
+# Khởi tạo các tệp CSV lịch sử nếu chưa có
 if not os.path.exists(EXPORT_FILE):
     pd.DataFrame(columns=["ExportDate", "Branch", "ItemName", "Unit", "Quantity", "Sender", "Receiver"]).to_csv(EXPORT_FILE, index=False)
 
@@ -265,101 +222,87 @@ def calculate_closing_stock(df):
     df["ClosingStock"] = df["OpeningStock"] + df["Import"] - df["BranchExport"] - df["ProcessingExport"]
     return df
 
-current_lang_key = st.session_state.get("lang_key", "vi")
-T = LANG[current_lang_key]
+# --- THANH BÊN (SIDEBAR) TƯƠNG TỰ TEMPLATE HTML ---
+with st.sidebar:
+    if st.button("Đăng Xuất / Log Out", use_container_width=True):
+        st.session_state.logged_in = False
+        st.session_state.role = ""
+        st.session_state.branch_name = ""
+        st.rerun()
 
-st.sidebar.header("Ngôn Ngữ / Language")
-selected_lang_ui = st.sidebar.selectbox(
-    "Chọn ngôn ngữ hiển thị:", 
-    ["Tiếng Việt", "English", "Magyar"], 
-    index=0 if current_lang_key == "vi" else (1 if current_lang_key == "en" else 2),
-    key="ui_lang_select"
-)
-new_lang_key = "vi" if selected_lang_ui == "Tiếng Việt" else ("en" if selected_lang_ui == "English" else "hu")
-if new_lang_key != st.session_state.lang_key:
-    st.session_state.lang_key = new_lang_key
-    st.rerun()
+    st.markdown("---")
+    st.markdown(f"Tài khoản: **`{st.session_state.role}`**")
+    if st.session_state.role == "Branch":
+        st.markdown(f"Chi nhánh: **`{st.session_state.branch_name}`**")
 
-T = LANG[st.session_state.lang_key]
+    st.markdown("---")
+    st.markdown(f"<h2>{TL['menu']}</h2>", unsafe_allow_html=True)
+    st.markdown("<p>Chọn chức năng:</p>", unsafe_allow_html=True)
 
-st.sidebar.markdown("---")
-st.sidebar.markdown(f"Tài khoản: `{st.session_state.role}`")
-if st.session_state.role == "Branch":
-    st.sidebar.markdown(f"Chi nhánh: `{st.session_state.branch_name}`")
+    pending_order_count = 0
+    if os.path.exists(ORDER_FILE):
+        try:
+            df_check_order = pd.read_csv(ORDER_FILE)
+            if not df_check_order.empty and "Status" in df_check_order.columns:
+                pending_order_count = len(df_check_order[df_check_order["Status"].str.contains("chờ", case=False, na=False)])
+        except:
+            pass
 
-if st.sidebar.button("Đăng Xuất / Log Out", use_container_width=True):
-    st.session_state.logged_in = False
-    st.session_state.role = ""
-    st.session_state.branch_name = ""
-    st.rerun()
+    order_menu_label = TL["m_order"]
+    if st.session_state.role == "Admin" and pending_order_count > 0:
+        order_menu_label = f"🔴 {TL['m_order']} ({pending_order_count} chờ duyệt)"
 
-st.sidebar.markdown("---")
+    if st.session_state.role == "Admin":
+        menu_options = {
+            TL["m_overview"]: "overview",
+            TL["m_import"]: "import",
+            TL["m_edit"]: "edit",
+            TL["m_add"]: "add",
+            TL["m_process"]: "process",
+            TL["m_distribute"]: "distribute",
+            TL["m_branch_inv"]: "branch_inv",
+            TL["m_transfer"]: "transfer",
+            order_menu_label: "order",
+            TL["m_guide"]: "guide"
+        }
+    else:
+        menu_options = {
+            TL["m_overview"]: "overview",
+            TL["m_branch_inv"]: "branch_inv",
+            TL["m_transfer"]: "transfer",
+            TL["m_order"]: "order",
+            TL["m_guide"]: "guide"
+        }
 
-pending_order_count = 0
-if os.path.exists(ORDER_FILE):
-    try:
-        df_check_order = pd.read_csv(ORDER_FILE)
-        if not df_check_order.empty and "Status" in df_check_order.columns:
-            pending_order_count = len(df_check_order[df_check_order["Status"].str.contains("chờ", case=False, na=False)])
-    except:
-        pass
+    selected_menu_label = st.radio("Chọn chức năng:", list(menu_options.keys()), label_visibility="collapsed")
+    choice = menu_options[selected_menu_label]
 
-st.sidebar.title(T["menu"])
-
-order_menu_label = T["m_order"]
-if st.session_state.role == "Admin" and pending_order_count > 0:
-    order_menu_label = f"🔴 {T['m_order']} ({pending_order_count} chờ duyệt)"
-
-if st.session_state.role == "Admin":
-    menu_options = {
-        T["m_overview"]: "overview",
-        T["m_import"]: "import",
-        T["m_edit"]: "edit",
-        T["m_add"]: "add",
-        T["m_process"]: "process",
-        T["m_distribute"]: "distribute",
-        T["m_branch_inv"]: "branch_inv",
-        T["m_transfer"]: "transfer",
-        order_menu_label: "order",
-        T["m_guide"]: "guide"
-    }
-else:
-    menu_options = {
-        T["m_overview"]: "overview",
-        T["m_branch_inv"]: "branch_inv",
-        T["m_transfer"]: "transfer",
-        T["m_order"]: "order",
-        T["m_guide"]: "guide"
-    }
-
-selected_menu_label = st.sidebar.radio("Chọn chức năng:", list(menu_options.keys()))
-choice = menu_options[selected_menu_label]
-
-st.title(T["title"])
+# --- NỘI DUNG CHÍNH (CONTENT) ---
+st.title(TL["title"])
 
 main_stock_df, processing_df = load_data()
 main_stock_df = calculate_closing_stock(main_stock_df)
 branch_data_dict = load_branch_data()
 
 if choice == "overview":
-    st.subheader(T["m_overview"])
+    st.subheader(TL["m_overview"])
     total_items = len(main_stock_df)
     low_stock_items = len(main_stock_df[main_stock_df["ClosingStock"] <= 5])
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric(label=T["total_items"], value=total_items)
+        st.metric(label=TL["total_items"], value=total_items)
     with col2:
-        st.metric(label=T["low_stock_warn"], value=low_stock_items, delta="Ổn định" if low_stock_items == 0 else "Chú ý", delta_color="inverse")
+        st.metric(label=TL["low_stock_warn"], value=low_stock_items, delta="Ổn định" if low_stock_items == 0 else "Chú ý", delta_color="inverse")
     with col3:
-        st.metric(label=T["total_branches"], value=len(BRANCH_LIST))
+        st.metric(label=TL["total_branches"], value=len(BRANCH_LIST))
         
     st.markdown("---")
-    st.markdown(f"### {T['main_stock_table']}")
+    st.markdown(f"### {TL['main_stock_table']}")
     st.dataframe(main_stock_df, use_container_width=True)
 
 elif choice == "import":
-    st.subheader(T["m_import"])
+    st.subheader(TL["m_import"])
     with st.form("import_form"):
         item_list = main_stock_df["ItemName"].tolist() if not main_stock_df.empty else []
         selected_item = st.selectbox("Chọn sản phẩm cần nhập:", item_list)
@@ -376,7 +319,7 @@ elif choice == "import":
                 st.rerun()
 
 elif choice == "edit":
-    st.subheader(T["m_edit"])
+    st.subheader(TL["m_edit"])
     with st.form("edit_stock_form"):
         item_list = main_stock_df["ItemName"].tolist() if not main_stock_df.empty else []
         selected_item = st.selectbox("Chọn sản phẩm cần sửa:", item_list)
@@ -395,12 +338,12 @@ elif choice == "edit":
                     st.rerun()
 
 elif choice == "add":
-    st.subheader(T["m_add"])
+    st.subheader(TL["m_add"])
     auto_id = f"SP{len(main_stock_df)+1:03d}" if not main_stock_df.empty else "SP001"
     with st.form("add_item_form"):
-        new_id = st.text_input("Mã sản phẩm (Tự động):", value=auto_id, disabled=True)
+        st.text_input("Mã sản phẩm (Tự động):", value=auto_id, disabled=True)
         new_name = st.text_input("Tên sản phẩm:")
-        new_unit = st.selectbox("Đơn vị tính:", ["Kg", "g", "L", "ml", "Can", "Chai", "Thùng", "Gói", "Hộp", "Cái"])
+        new_unit = st.selectbox("Đơn vị tính:", UNIT_LIST)
         new_opening = st.number_input("Tồn kho đầu kỳ:", min_value=0.0, step=1.0)
         new_source = st.text_input("Nguồn cung cấp:", value="Nhà cung cấp chính")
         submitted_add = st.form_submit_button("Thêm Sản Phẩm")
@@ -416,7 +359,7 @@ elif choice == "add":
             st.rerun()
 
 elif choice == "process":
-    st.subheader(T["m_process"])
+    st.subheader(TL["m_process"])
     with st.form("process_form"):
         p_date = st.date_input("Ngày sơ chế:", datetime.now())
         p_batch = st.text_input("Mã lô:", value=f"BATCH-{datetime.now().strftime('%Y%m%d')}")
@@ -443,7 +386,7 @@ elif choice == "process":
                 st.rerun()
 
 elif choice == "distribute":
-    st.subheader(T["m_distribute"])
+    st.subheader(TL["m_distribute"])
     with st.form("distribute_form"):
         d_branch = st.selectbox("Chọn chi nhánh nhận hàng:", BRANCH_LIST)
         item_list_dist = main_stock_df["ItemName"].tolist() if not main_stock_df.empty else []
@@ -478,13 +421,16 @@ elif choice == "distribute":
                         main_stock_df.loc[idx, "BranchExport"] += d_qty
                         
                     b_idx = target_branch_df[target_branch_df["ItemName"] == d_item].index
+                    unit_val = "Kg"
+                    if not idx.empty:
+                        unit_val = main_stock_df.loc[idx, "Unit"].values[0]
+
                     if not b_idx.empty:
                         target_branch_df.loc[b_idx, "StockQty"] += d_qty
                         target_branch_df.loc[b_idx, "ImportedQty"] += d_qty
                     else:
                         match_row = main_stock_df[main_stock_df["ItemName"] == d_item]
                         item_id_val = match_row["ItemID"].values[0] if not match_row.empty else "SP000"
-                        unit_val = match_row["Unit"].values[0] if not match_row.empty else "Kg"
                         new_b_row = {
                             "ItemID": item_id_val, "ItemName": d_item, "Unit": unit_val,
                             "StockQty": d_qty, "ImportedQty": d_qty, "UsedQty": 0.0, "Note": "Nhận từ Kho Tổng"
@@ -495,7 +441,7 @@ elif choice == "distribute":
 
                     export_record = {
                         "ExportDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "Branch": d_branch, "ItemName": d_item, "Unit": "Kg/Thùng",
+                        "Branch": d_branch, "ItemName": d_item, "Unit": unit_val,
                         "Quantity": d_qty, "Sender": "Kho Tổng", "Receiver": d_branch
                     }
                     exp_df = pd.concat([exp_df, pd.DataFrame([export_record])], ignore_index=True)
@@ -509,7 +455,7 @@ elif choice == "distribute":
                 st.rerun()
 
 elif choice == "branch_inv":
-    st.subheader(T["m_branch_inv"])
+    st.subheader(TL["m_branch_inv"])
     if st.session_state.role == "Admin":
         active_branch = st.selectbox("Chọn chi nhánh để quản lý kho:", BRANCH_LIST)
     else:
@@ -523,11 +469,10 @@ elif choice == "branch_inv":
 
     st.markdown("---")
     
-    # 1. Thêm sản phẩm mới vào kho chi nhánh (mua ngoài)
     with st.expander("➕ Tự thêm sản phẩm mới vào kho chi nhánh này (Mua ngoài / Khác)"):
         with st.form(f"add_branch_item_form_{active_branch}"):
             b_new_name = st.text_input("Tên sản phẩm mới:")
-            b_new_unit = st.selectbox("Đơn vị tính:", ["Kg", "g", "L", "ml", "Can", "Chai", "Thùng", "Gói", "Hộp", "Cái"], key=f"b_unit_{active_branch}")
+            b_new_unit = st.selectbox("Đơn vị tính:", UNIT_LIST, key=f"b_unit_{active_branch}")
             b_new_stock = st.number_input("Số lượng tồn kho ban đầu:", min_value=0.0, step=1.0, key=f"b_stock_{active_branch}")
             b_new_note = st.text_input("Ghi chú nguồn hàng:", value="Chi nhánh tự mua ngoài", key=f"b_note_{active_branch}")
             btn_add_b_item = st.form_submit_button("Thêm Sản Phẩm Vào Kho Chi Nhánh")
@@ -535,79 +480,17 @@ elif choice == "branch_inv":
             if btn_add_b_item and b_new_name.strip():
                 b_auto_id = f"BS-{len(current_b_df)+1:03d}"
                 new_b_row = {
-                    "ItemID": b_auto_id,
-                    "ItemName": b_new_name,
-                    "Unit": b_new_unit,
-                    "StockQty": b_new_stock,
-                    "ImportedQty": b_new_stock,
-                    "UsedQty": 0.0,
-                    "Note": b_new_note
+                    "ItemID": b_auto_id, "ItemName": b_new_name, "Unit": b_new_unit,
+                    "StockQty": b_new_stock, "ImportedQty": b_new_stock, "UsedQty": 0.0, "Note": b_new_note
                 }
                 current_b_df = pd.concat([current_b_df, pd.DataFrame([new_b_row])], ignore_index=True)
                 branch_data_dict[active_branch] = current_b_df
                 save_branch_data(branch_data_dict)
-                st.success(f"Đã thêm sản phẩm **{b_new_name}** vào kho chi nhánh **{active_branch}** thành công!")
-                st.rerun()
-
-    # 2. Ghi nhận sơ chế & hao hụt tại chi nhánh
-    with st.expander("🔪 Sơ chế & Ghi nhận hao hụt tại chi nhánh"):
-        with st.form(f"branch_processing_form_{active_branch}"):
-            bp_date = st.date_input("Ngày sơ chế:", datetime.now())
-            bp_raw = st.selectbox("Chọn nguyên liệu trong kho chi nhánh:", current_b_df["ItemName"].tolist() if not current_b_df.empty else [])
-            bp_used = st.number_input("Số lượng nguyên liệu mang ra sơ chế:", min_value=0.0, step=1.0)
-            bp_finished_name = st.text_input("Tên thành phẩm thu được sau sơ chế:")
-            bp_prod_qty = st.number_input("Số lượng thành phẩm thu được:", min_value=0.0, step=1.0)
-            bp_waste = st.number_input("Hao hụt / Phế phẩm bỏ đi:", min_value=0.0, step=1.0)
-            bp_note = st.text_input("Ghi chú chi tiết:")
-            btn_save_bp = st.form_submit_button("Lưu Sơ Chế & Trừ Kho")
-            
-            if btn_save_bp and bp_raw:
-                b_idx = current_b_df[current_b_df["ItemName"] == bp_raw].index
-                if not b_idx.empty:
-                    current_b_df.loc[b_idx, "UsedQty"] += bp_used
-                    current_b_df.loc[b_idx, "StockQty"] = max(0.0, current_b_df.loc[b_idx, "StockQty"] - bp_used)
-                    branch_data_dict[active_branch] = current_b_df
-                    save_branch_data(branch_data_dict)
-                    
-                    # Lưu lịch sử sơ chế chi nhánh
-                    bp_record = {
-                        "Date": bp_date.strftime("%Y-%m-%d"),
-                        "Branch": active_branch,
-                        "RawMaterial": bp_raw,
-                        "UsedQuantity": bp_used,
-                        "FinishedProduct": bp_finished_name,
-                        "ProducedQuantity": bp_prod_qty,
-                        "WasteLoss": bp_waste,
-                        "Note": bp_note
-                    }
-                    b_proc_df = pd.read_csv(BRANCH_PROC_FILE)
-                    b_proc_df = pd.concat([b_proc_df, pd.DataFrame([bp_record])], ignore_index=True)
-                    b_proc_df.to_csv(BRANCH_PROC_FILE, index=False)
-                    
-                    st.success(f"Đã ghi nhận sơ chế và cập nhật trừ kho chi nhánh **{active_branch}** thành công!")
-                    st.rerun()
-
-    # 3. Cập nhật xuất dùng thông thường tại chi nhánh
-    st.markdown("#### Cập nhật xuất dùng hàng ngày tại chi nhánh")
-    with st.form(f"update_branch_stock_{active_branch}"):
-        b_items = current_b_df["ItemName"].tolist() if not current_b_df.empty else []
-        sel_b_item = st.selectbox("Chọn mặt hàng xuất dùng:", b_items) if b_items else st.selectbox("Không có nguyên liệu", [])
-        used_amount = st.number_input("Số lượng xuất dùng:", min_value=0.0, step=1.0)
-        b_note = st.text_input("Ghi chú xuất dùng:")
-        btn_save_b = st.form_submit_button("Cập Nhật Xuất Dùng (Trừ Tồn Kho)")
-        
-        if btn_save_b and sel_b_item:
-            b_idx = current_b_df[current_b_df["ItemName"] == sel_b_item].index
-            if not b_idx.empty:
-                current_b_df.loc[b_idx, "UsedQty"] += used_amount
-                current_b_df.loc[b_idx, "StockQty"] = max(0.0, current_b_df.loc[b_idx, "StockQty"] - used_amount)
-                branch_data_dict[active_branch] = current_b_df
-                save_branch_data(branch_data_dict)
-                st.success("Cập nhật kho chi nhánh thành công!")
+                st.success(f"Đã thêm sản phẩm **{b_new_name}** vào kho chi nhánh thành công!")
                 st.rerun()
 
 elif choice == "transfer":
-    st.subheader(T["m_transfer"])
+    st.subheader(TL["m_transfer"])
     transfer_units = BRANCH_LIST + ["Kho Tổng"]
     with st.form("transfer_form"):
         col_f1, col_f2 = st.columns(2)
@@ -622,12 +505,14 @@ elif choice == "transfer":
         
         for i in range(st.session_state.transfer_rows_count):
             st.markdown(f"**Sản phẩm chuyển #{i+1}**")
-            col_t1, col_t2 = st.columns([2, 1])
+            col_t1, col_t2, col_t3 = st.columns([2, 1, 1])
             with col_t1:
                 t_item = st.selectbox("Sản phẩm:", item_list_trans, key=f"trans_item_{i}") if item_list_trans else None
             with col_t2:
                 t_qty = st.number_input("Số lượng:", min_value=0.0, step=1.0, key=f"trans_qty_{i}")
-            selected_trans_data.append((t_item, t_qty))
+            with col_t3:
+                t_unit = st.selectbox("Đơn vị:", UNIT_LIST, key=f"trans_unit_{i}")
+            selected_trans_data.append((t_item, t_qty, t_unit))
             
         submitted_add_trans_row = st.form_submit_button("➕ Thêm sản phẩm khác")
         submitted_trans = st.form_submit_button("Xác Nhận Chuyển Hàng")
@@ -642,13 +527,13 @@ elif choice == "transfer":
             else:
                 valid_any_trans = False
                 trans_df = pd.read_csv(TRANSFER_FILE)
-                for t_item, t_qty in selected_trans_data:
+                for t_item, t_qty, t_unit in selected_trans_data:
                     if t_item and t_qty > 0:
                         valid_any_trans = True
                         trans_record = {
                             "TransferDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                             "FromBranch": t_from, "ToBranch": t_to,
-                            "ItemName": t_item, "Unit": "Kg/Thùng",
+                            "ItemName": t_item, "Unit": t_unit,
                             "Quantity": t_qty, "Staff": t_staff
                         }
                         trans_df = pd.concat([trans_df, pd.DataFrame([trans_record])], ignore_index=True)
@@ -660,19 +545,23 @@ elif choice == "transfer":
                     st.rerun()
 
 elif choice.startswith("🔴") or choice == "order":
-    st.subheader(T["m_order"])
+    st.subheader(TL["m_order"])
     if st.session_state.role == "Branch":
         st.markdown(f"Giao diện đặt hàng cho chi nhánh: **{st.session_state.branch_name}**")
         with st.form("branch_order_form"):
             order_item = st.selectbox("Chọn sản phẩm muốn đặt:", main_stock_df["ItemName"].tolist() if not main_stock_df.empty else [])
-            order_qty = st.number_input("Số lượng đặt:", min_value=1.0, step=1.0)
+            col_o1, col_o2 = st.columns([2, 1])
+            with col_o1:
+                order_qty = st.number_input("Số lượng đặt:", min_value=1.0, step=1.0)
+            with col_o2:
+                order_unit = st.selectbox("Đơn vị:", UNIT_LIST)
             order_note = st.text_area("Ghi chú thêm cho Kho Tổng:")
             submitted_order = st.form_submit_button("Gửi Yêu Cầu Đặt Hàng")
             if submitted_order:
                 new_order = {
                     "OrderDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "Branch": st.session_state.branch_name,
-                    "ItemName": order_item, "Unit": "Kg/Thùng",
+                    "ItemName": order_item, "Unit": order_unit,
                     "Quantity": order_qty, "Status": "Đang chờ duyệt", "Note": order_note
                 }
                 order_df = pd.read_csv(ORDER_FILE)
@@ -697,5 +586,5 @@ elif choice.startswith("🔴") or choice == "order":
                     st.rerun()
 
 elif choice == "guide":
-    st.subheader(T["m_guide"])
-    st.markdown(T["guide_content"])
+    st.subheader(TL["m_guide"])
+    st.markdown(TL["guide_content"])
