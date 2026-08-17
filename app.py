@@ -56,7 +56,6 @@ BRANCH_PROC_FILE = "branch_processing_history.csv"
 SECRET_ACTION_PWD = "264221"
 
 BRANCH_LIST = ["Shibuya", "Little Geisha Baross", "Little Geisha Corvin", "URBN.Station", "Matchy"]
-UNIT_LIST = ["Kg", "g", "L", "ml", "Can", "Chai", "Thùng", "Gói", "Hộp", "Cái"]
 
 if "passwords" not in st.session_state:
     st.session_state.passwords = {
@@ -401,7 +400,7 @@ elif choice == "add":
     with st.form("add_item_form"):
         new_id = st.text_input("Mã sản phẩm (Tự động):", value=auto_id, disabled=True)
         new_name = st.text_input("Tên sản phẩm:")
-        new_unit = st.selectbox("Đơn vị tính:", UNIT_LIST)
+        new_unit = st.selectbox("Đơn vị tính:", ["Kg", "g", "L", "ml", "Can", "Chai", "Thùng", "Gói", "Hộp", "Cái"])
         new_opening = st.number_input("Tồn kho đầu kỳ:", min_value=0.0, step=1.0)
         new_source = st.text_input("Nguồn cung cấp:", value="Nhà cung cấp chính")
         submitted_add = st.form_submit_button("Thêm Sản Phẩm")
@@ -479,16 +478,13 @@ elif choice == "distribute":
                         main_stock_df.loc[idx, "BranchExport"] += d_qty
                         
                     b_idx = target_branch_df[target_branch_df["ItemName"] == d_item].index
-                    unit_val = "Kg"
-                    if not idx.empty:
-                        unit_val = main_stock_df.loc[idx, "Unit"].values[0]
-
                     if not b_idx.empty:
                         target_branch_df.loc[b_idx, "StockQty"] += d_qty
                         target_branch_df.loc[b_idx, "ImportedQty"] += d_qty
                     else:
                         match_row = main_stock_df[main_stock_df["ItemName"] == d_item]
                         item_id_val = match_row["ItemID"].values[0] if not match_row.empty else "SP000"
+                        unit_val = match_row["Unit"].values[0] if not match_row.empty else "Kg"
                         new_b_row = {
                             "ItemID": item_id_val, "ItemName": d_item, "Unit": unit_val,
                             "StockQty": d_qty, "ImportedQty": d_qty, "UsedQty": 0.0, "Note": "Nhận từ Kho Tổng"
@@ -499,7 +495,7 @@ elif choice == "distribute":
 
                     export_record = {
                         "ExportDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "Branch": d_branch, "ItemName": d_item, "Unit": unit_val,
+                        "Branch": d_branch, "ItemName": d_item, "Unit": "Kg/Thùng",
                         "Quantity": d_qty, "Sender": "Kho Tổng", "Receiver": d_branch
                     }
                     exp_df = pd.concat([exp_df, pd.DataFrame([export_record])], ignore_index=True)
@@ -531,7 +527,7 @@ elif choice == "branch_inv":
     with st.expander("➕ Tự thêm sản phẩm mới vào kho chi nhánh này (Mua ngoài / Khác)"):
         with st.form(f"add_branch_item_form_{active_branch}"):
             b_new_name = st.text_input("Tên sản phẩm mới:")
-            b_new_unit = st.selectbox("Đơn vị tính:", UNIT_LIST, key=f"b_unit_{active_branch}")
+            b_new_unit = st.selectbox("Đơn vị tính:", ["Kg", "g", "L", "ml", "Can", "Chai", "Thùng", "Gói", "Hộp", "Cái"], key=f"b_unit_{active_branch}")
             b_new_stock = st.number_input("Số lượng tồn kho ban đầu:", min_value=0.0, step=1.0, key=f"b_stock_{active_branch}")
             b_new_note = st.text_input("Ghi chú nguồn hàng:", value="Chi nhánh tự mua ngoài", key=f"b_note_{active_branch}")
             btn_add_b_item = st.form_submit_button("Thêm Sản Phẩm Vào Kho Chi Nhánh")
@@ -573,6 +569,7 @@ elif choice == "branch_inv":
                     branch_data_dict[active_branch] = current_b_df
                     save_branch_data(branch_data_dict)
                     
+                    # Lưu lịch sử sơ chế chi nhánh
                     bp_record = {
                         "Date": bp_date.strftime("%Y-%m-%d"),
                         "Branch": active_branch,
@@ -625,14 +622,12 @@ elif choice == "transfer":
         
         for i in range(st.session_state.transfer_rows_count):
             st.markdown(f"**Sản phẩm chuyển #{i+1}**")
-            col_t1, col_t2, col_t3 = st.columns([2, 1, 1])
+            col_t1, col_t2 = st.columns([2, 1])
             with col_t1:
                 t_item = st.selectbox("Sản phẩm:", item_list_trans, key=f"trans_item_{i}") if item_list_trans else None
             with col_t2:
                 t_qty = st.number_input("Số lượng:", min_value=0.0, step=1.0, key=f"trans_qty_{i}")
-            with col_t3:
-                t_unit = st.selectbox("Đơn vị:", UNIT_LIST, key=f"trans_unit_{i}")
-            selected_trans_data.append((t_item, t_qty, t_unit))
+            selected_trans_data.append((t_item, t_qty))
             
         submitted_add_trans_row = st.form_submit_button("➕ Thêm sản phẩm khác")
         submitted_trans = st.form_submit_button("Xác Nhận Chuyển Hàng")
@@ -647,13 +642,13 @@ elif choice == "transfer":
             else:
                 valid_any_trans = False
                 trans_df = pd.read_csv(TRANSFER_FILE)
-                for t_item, t_qty, t_unit in selected_trans_data:
+                for t_item, t_qty in selected_trans_data:
                     if t_item and t_qty > 0:
                         valid_any_trans = True
                         trans_record = {
                             "TransferDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                             "FromBranch": t_from, "ToBranch": t_to,
-                            "ItemName": t_item, "Unit": t_unit,
+                            "ItemName": t_item, "Unit": "Kg/Thùng",
                             "Quantity": t_qty, "Staff": t_staff
                         }
                         trans_df = pd.concat([trans_df, pd.DataFrame([trans_record])], ignore_index=True)
@@ -670,18 +665,14 @@ elif choice.startswith("🔴") or choice == "order":
         st.markdown(f"Giao diện đặt hàng cho chi nhánh: **{st.session_state.branch_name}**")
         with st.form("branch_order_form"):
             order_item = st.selectbox("Chọn sản phẩm muốn đặt:", main_stock_df["ItemName"].tolist() if not main_stock_df.empty else [])
-            col_o1, col_o2 = st.columns([2, 1])
-            with col_o1:
-                order_qty = st.number_input("Số lượng đặt:", min_value=1.0, step=1.0)
-            with col_o2:
-                order_unit = st.selectbox("Đơn vị:", UNIT_LIST)
+            order_qty = st.number_input("Số lượng đặt:", min_value=1.0, step=1.0)
             order_note = st.text_area("Ghi chú thêm cho Kho Tổng:")
             submitted_order = st.form_submit_button("Gửi Yêu Cầu Đặt Hàng")
             if submitted_order:
                 new_order = {
                     "OrderDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "Branch": st.session_state.branch_name,
-                    "ItemName": order_item, "Unit": order_unit,
+                    "ItemName": order_item, "Unit": "Kg/Thùng",
                     "Quantity": order_qty, "Status": "Đang chờ duyệt", "Note": order_note
                 }
                 order_df = pd.read_csv(ORDER_FILE)
