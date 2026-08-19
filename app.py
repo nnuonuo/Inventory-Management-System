@@ -823,7 +823,6 @@ elif choice.startswith("🔴") or choice == "order":
             st.dataframe(ord_df, use_container_width=True)
 
 elif choice == "history":
-    # Lịch sử giao dịch & sơ chế chỉ dành cho Admin.
     if st.session_state.role != "Admin":
         st.error("🚫 Bạn không có quyền truy cập vào mục lịch sử này. Khu vực này chỉ dành cho Admin.")
     else:
@@ -857,8 +856,6 @@ elif choice == "history":
 
         with tab2:
             st.markdown("### Lịch sử sơ chế nguyên liệu & hao hụt")
-
-            # Lịch sử sơ chế kho tổng: chỉ Admin mới nhìn thấy.
             if os.path.exists(DATA_FILE):
                 try:
                     df_main_proc = pd.read_excel(DATA_FILE, sheet_name="ProcessingLog")
@@ -903,12 +900,3 @@ elif choice == "history":
 
 elif choice == "guide":
     st.markdown(T["guide_content"])
-
-
-
-if st.session_state.get("role") == "Admin":
-    menu_options = ["Tổng Quan", "Kho Chi Nhánh", "Chuyển Hàng", "Lịch Sử"]
-else:
-    menu_options = ["Tổng Quan", "Kho Chi Nhánh", "Đặt Hàng"]
-
-choice = st.radio("Chọn chức năng:", menu_options)
