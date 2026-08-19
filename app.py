@@ -80,6 +80,7 @@ LANG = {
         "menu": "Chức Năng Hệ Thống",
         "m_overview": "Tổng Quan & Cảnh Báo Kho",
         "m_import": "Nhập Hàng Kho Tổng",
+        "m_branch_import": "Nhập Hàng Chi Nhánh",
         "m_edit": "Sửa Tồn Kho Đầu Kỳ",
         "m_add": "Thêm Sản Phẩm Mới",
         "m_process": "Sơ Chế Kho Tổng & Hao Hụt",
@@ -96,6 +97,7 @@ LANG = {
         "main_stock_table": "Bảng Tồn Kho Kho Tổng (Main Stock)",
         "tip_overview": "💡 **Mục này làm gì?** Xem nhanh tổng số lượng mặt hàng, các sản phẩm tồn kho thấp cần chú ý và thông tin chuỗi.",
         "tip_import": "💡 **Mục này làm gì?** Ghi nhận số lượng nguyên vật liệu mới nhập từ nhà cung cấp vào kho tổng.",
+        "tip_branch_import": "💡 **Mục này làm gì?** Ghi nhận số lượng nguyên vật liệu mới nhập trực tiếp tại kho của chi nhánh.",
         "tip_edit": "💡 **Mục này làm gì?** Điều chỉnh lại tồn kho đầu kỳ của sản phẩm (Dành riêng cho Admin, yêu cầu mật khẩu bảo mật).",
         "tip_add": "💡 **Mục này làm gì?** Khai báo sản phẩm mới vào danh mục quản lý của kho tổng.",
         "tip_process": "💡 **Mục này làm gì?** Ghi nhận quá trình sơ chế nguyên liệu thô thành thành phẩm và hao hụt phát sinh tại kho tổng.",
@@ -108,44 +110,48 @@ LANG = {
         "guide_content": """### 📖 Sổ Tay Hướng Dẫn Sử Dụng Hệ Thống Kho & Chuỗi
 
 #### 1. 📊 Tổng Quan & Cảnh Báo Kho (Overview)
-* **Mục đích:** Xem nhanh tổng số lượng mặt hàng, các sản phẩm đang có nguy cơ hết hàng ($\le 5$) và số lượng chi nhánh.[cite: 2]
-* **Cần làm gì:** Kiểm tra bảng tồn kho chính và bấm nút **Tải xuống bảng tồn kho tổng** để xuất file Excel báo cáo.[cite: 2]
+* **Mục đích:** Xem nhanh tổng số lượng mặt hàng, các sản phẩm đang có nguy cơ hết hàng ($\le 5$) và số lượng chi nhánh.
+* **Cần làm gì:** Kiểm tra bảng tồn kho chính và bấm nút **Tải xuống bảng tồn kho tổng** để xuất file Excel báo cáo.
 
 #### 2. 📥 Nhập Hàng Kho Tổng (Main Stock Import)
-* **Mục đích:** Ghi nhận số lượng nguyên vật liệu mới nhập từ nhà cung cấp vào kho tổng.[cite: 2]
-* **Cần làm gì:** Chọn đúng sản phẩm cần nhập, nhập số lượng thêm và điền tên nhà cung cấp, sau đó bấm **Xác Nhận Nhập Hàng**.[cite: 2]
+* **Mục đích:** Ghi nhận số lượng nguyên vật liệu mới nhập từ nhà cung cấp vào kho tổng.
+* **Cần làm gì:** Chọn đúng sản phẩm cần nhập, nhập số lượng thêm và điền tên nhà cung cấp, sau đó bấm **Xác Nhận Nhập Hàng**.
 
-#### 3. 📝 Sửa Tồn Kho Đầu Kỳ (Edit Opening Stock)
-* **Mục đích:** Điều chỉnh lại số lượng gốc ban đầu của sản phẩm.[cite: 2]
-* **Cần làm gì:** Chỉ dành cho Admin khi kiểm kê kho. Bắt buộc nhập mật khẩu bảo mật (`264221`) để xác nhận thay đổi.[cite: 2]
+#### 3. 📥 Nhập Hàng Chi Nhánh (Branch Local Import)
+* **Mục đích:** Ghi nhận số lượng nguyên vật liệu mới nhập trực tiếp tại kho của chi nhánh.
+* **Cần làm gì:** Chọn chi nhánh, chọn sản phẩm, nhập số lượng và nhà cung cấp địa phương.
 
-#### 4. ➕ Thêm Sản Phẩm Mới (Add New Item)
-* **Mục đích:** Khai báo một mặt hàng mới vào hệ thống quản lý.[cite: 2]
-* **Cần làm gì:** Nhập tên sản phẩm, chọn đơn vị tính, điền số lượng tồn đầu kỳ và nguồn cung cấp.[cite: 2]
+#### 4. 📝 Sửa Tồn Kho Đầu Kỳ (Edit Opening Stock)
+* **Mục đích:** Điều chỉnh lại số lượng gốc ban đầu của sản phẩm.
+* **Cần làm gì:** Chỉ dành cho Admin khi kiểm kê kho. Bắt buộc nhập mật khẩu bảo mật (`264221`) để xác nhận thay đổi.
 
-#### 5. 🔪 Sơ Chế & Hao Hụt Kho Tổng / Chi Nhánh (Processing Log)
-* **Mục đích:** Quản lý quy trình chế biến nguyên liệu thô thành thành phẩm và ghi nhận phần hao hụt/phế phẩm.[cite: 2]
-* **Cần làm gì:** Chọn nguyên liệu thô bị trừ kho, nhập số lượng dùng, tên thành phẩm, số lượng thu về và lượng hao hụt.[cite: 2]
+#### 5. ➕ Thêm Sản Phẩm Mới (Add New Item)
+* **Mục đích:** Khai báo một mặt hàng mới vào hệ thống quản lý.
+* **Cần làm gì:** Nhập tên sản phẩm, chọn đơn vị tính, điền số lượng tồn đầu kỳ và nguồn cung cấp.
 
-#### 6. 🚚 Cấp Hàng Cho Chi Nhánh (Branch Distribution)
-* **Mục đích:** Phân bổ hàng hóa từ kho tổng xuống các chi nhánh.[cite: 2]
-* **Cần làm gì:** Chọn chi nhánh nhận, chọn sản phẩm và số lượng tương ứng, hệ thống sẽ tự động trừ kho tổng và cộng vào kho chi nhánh.[cite: 2]
+#### 6. 🔪 Sơ Chế & Hao Hụt Kho Tổng / Chi Nhánh (Processing Log)
+* **Mục đích:** Quản lý quy trình chế biến nguyên liệu thô thành thành phẩm và ghi nhận phần hao hụt/phế phẩm.
+* **Cần làm gì:** Chọn nguyên liệu thô bị trừ kho, nhập số lượng dùng, tên thành phẩm, số lượng thu về và lượng hao hụt.
 
-#### 7. 🏪 Kho Riêng Chi Nhánh (Branch Local Inventory)
-* **Mục đích:** Theo dõi số lượng tồn kho nội bộ tại từng chi nhánh.[cite: 2]
-* **Cần làm gì:** Kiểm tra hàng tồn và bấm nút tải Excel tương ứng. Có thể tự thêm sản phẩm mua ngoài bằng cách mở phần mở rộng bên dưới.[cite: 2]
+#### 7. 🚚 Cấp Hàng Cho Chi Nhánh (Branch Distribution)
+* **Mục đích:** Phân bổ hàng hóa từ kho tổng xuống các chi nhánh.
+* **Cần làm gì:** Chọn chi nhánh nhận, chọn sản phẩm và số lượng tương ứng, hệ thống sẽ tự động trừ kho tổng và cộng vào kho chi nhánh.
 
-#### 8. 🔄 Chuyển Hàng Giữa Chi Nhánh (Inter-branch Transfer)
-* **Mục đích:** Ghi nhận việc điều chuyển hàng hóa nội bộ giữa các chi nhánh hoặc giữa chi nhánh với kho tổng.[cite: 2]
-* **Cần làm gì:** Chọn đơn vị gửi, đơn vị nhận, điền tên nhân viên thực hiện và danh sách sản phẩm cần chuyển.[cite: 2]
+#### 8. 🏪 Kho Riêng Chi Nhánh (Branch Local Inventory)
+* **Mục đích:** Theo dõi số lượng tồn kho nội bộ tại từng chi nhánh.
+* **Cần làm gì:** Kiểm tra hàng tồn và bấm nút tải Excel tương ứng. Có thể tự thêm sản phẩm mua ngoài bằng cách mở phần mở rộng bên dưới.
 
-#### 9. 📋 Chi Nhánh Đặt Hàng Kho Tổng (Order Request)
-* **Mục đích:** Cho phép chi nhánh gửi yêu cầu đặt hàng về kho tổng hoặc để Admin duyệt các đơn hàng.[cite: 2]
-* **Cần làm gì:** Chi nhánh điền đơn đặt hàng gửi đi; Admin vào mục này để kiểm tra danh sách chờ duyệt từ các chi nhánh.[cite: 2]
+#### 9. 🔄 Chuyển Hàng Giữa Chi Nhánh (Inter-branch Transfer)
+* **Mục đích:** Ghi nhận việc điều chuyển hàng hóa nội bộ giữa các chi nhánh hoặc giữa chi nhánh với kho tổng.
+* **Cần làm gì:** Chọn đơn vị gửi, đơn vị nhận, điền tên nhân viên thực hiện và danh sách sản phẩm cần chuyển.
 
-#### 10. 📜 Xem Lịch Sử Giao Dịch & Sơ Chế (History)
-* **Mục đích:** Tra cứu lại toàn bộ nhật ký hoạt động cũ của hệ thống.[cite: 2]
-* **Cần làm gì:** Chuyển qua lại giữa các tab để xem báo cáo và bấm nút tải Excel tương ứng để lưu trữ.[cite: 2]"""
+#### 10. 📋 Chi Nhánh Đặt Hàng Kho Tổng (Order Request)
+* **Mục đích:** Cho phép chi nhánh gửi yêu cầu đặt hàng về kho tổng hoặc để Admin duyệt các đơn hàng.
+* **Cần làm gì:** Chi nhánh điền đơn đặt hàng gửi đi; Admin vào mục này để kiểm tra danh sách chờ duyệt từ các chi nhánh.
+
+#### 11. 📜 Xem Lịch Sử Giao Dịch & Sơ Chế (History)
+* **Mục đích:** Tra cứu lại toàn bộ nhật ký hoạt động cũ của hệ thống.
+* **Cần làm gì:** Chuyển qua lại giữa các tab để xem báo cáo và bấm nút tải Excel tương ứng để lưu trữ."""
     },
     "en": {
         "login_title": "Restaurant Inventory & Chain Management Login",
@@ -157,6 +163,7 @@ LANG = {
         "menu": "System Menu",
         "m_overview": "Overview & Stock Alerts",
         "m_import": "Main Stock Import",
+        "m_branch_import": "Branch Local Import",
         "m_edit": "Edit Opening Stock",
         "m_add": "Add New Item",
         "m_process": "Main Stock Processing Log",
@@ -173,6 +180,7 @@ LANG = {
         "main_stock_table": "Main Inventory Stock Table",
         "tip_overview": "💡 **What does this do?** Quickly view total items, low stock alerts, and branch status.",
         "tip_import": "💡 **What does this do?** Record newly imported raw materials from suppliers into the main stock.",
+        "tip_branch_import": "💡 **What does this do?** Record newly imported raw materials directly into the branch inventory.",
         "tip_edit": "💡 **What does this do?** Adjust the opening stock quantity of items (Admin only, requires security password).",
         "tip_add": "💡 **What does this do?** Register a new product into the main inventory catalog.",
         "tip_process": "💡 **What does this do?** Record the processing of raw materials into finished goods and waste/loss tracking in main stock.",
@@ -185,43 +193,47 @@ LANG = {
         "guide_content": """### 📖 System User Guide & Manual
 
 #### 1. 📊 Overview & Stock Alerts
-* **Purpose:** Quickly check total items, low stock warnings ($\le 5$), and branch status.[cite: 2]
-* **Action:** Review the main table and click **Download Main Stock (Excel)** to export reports.[cite: 2]
+* **Purpose:** Quickly check total items, low stock warnings ($\le 5$), and branch status.
+* **Action:** Review the main table and click **Download Main Stock (Excel)** to export reports.
 
 #### 2. 📥 Main Stock Import
-* **Purpose:** Record new raw materials imported from suppliers into the central warehouse.[cite: 2]
-* **Action:** Select the product, enter the quantity, specify the supplier, and click **Confirm Import**.[cite: 2]
+* **Purpose:** Record new raw materials imported from suppliers into the central warehouse.
+* **Action:** Select the product, enter the quantity, specify the supplier, and click **Confirm Import**.
 
-#### 3. 📝 Edit Opening Stock
-* **Purpose:** Adjust the baseline initial opening stock of products.[cite: 2]
-* **Action:** Admin only, requires security password (`264221`) to confirm changes.[cite: 2]
+#### 3. 📥 Branch Local Import
+* **Purpose:** Record newly imported raw materials directly into the branch inventory.
+* **Action:** Select branch, item, quantity, and local supplier.
 
-#### 4. ➕ Add New Item
-* **Purpose:** Register a brand new product into the inventory system.[cite: 2]
-* **Action:** Enter product name, select unit, set opening stock, and supply source.[cite: 2]
+#### 4. 📝 Edit Opening Stock
+* **Purpose:** Adjust the baseline initial opening stock of products.
+* **Action:** Admin only, requires security password (`264221`) to confirm changes.
 
-#### 5. 🔪 Processing & Waste Log
-* **Purpose:** Manage transformation of raw materials into finished goods and track waste/loss.[cite: 2]
-* **Action:** Select date, batch ID, raw material used, output product, and waste quantity.[cite: 2]
+#### 5. ➕ Add New Item
+* **Purpose:** Register a brand new product into the inventory system.
+* **Action:** Enter product name, select unit, set opening stock, and supply source.
 
-#### 6. 🚚 Branch Distribution
-* **Purpose:** Allocate items from the main stock to individual branches.[cite: 2]
-* **Action:** Choose target branch, select items and quantities. Stock is automatically deducted from main and added to branch.[cite: 2]
+#### 6. 🔪 Processing & Waste Log
+* **Purpose:** Manage transformation of raw materials into finished goods and track waste/loss.
+* **Action:** Select date, batch ID, raw material used, output product, and waste quantity.
 
-#### 7. 🏪 Branch Local Inventory
-* **Purpose:** Track internal stock levels at each branch location.[cite: 2]
-* **Action:** Check stock or download Excel reports. Branch staff can add local purchased items using the expander below.[cite: 2]
+#### 7. 🚚 Branch Distribution
+* **Purpose:** Allocate items from the main stock to individual branches.
+* **Action:** Choose target branch, select items and quantities. Stock is automatically deducted from main and added to branch.
 
-#### 8. 🔄 Inter-branch Transfer
-* **Purpose:** Record internal stock movements between branches or between branch and central warehouse.[cite: 2]
-* **Action:** Select sender, receiver, staff name, and list of items to transfer.[cite: 2]
+#### 8. 🏪 Branch Local Inventory
+* **Purpose:** Track internal stock levels at each branch location.
+* **Action:** Check stock or download Excel reports. Branch staff can add local purchased items using the expander below.
 
-#### 9. 📋 Branch Order Request
-* **Purpose:** Allow branches to request items from central stock or for admins to review orders.[cite: 2]
-* **Action:** Branches submit requests; Admin reviews and processes pending orders here.[cite: 2]
+#### 9. 🔄 Inter-branch Transfer
+* **Purpose:** Record internal stock movements between branches or between branch and central warehouse.
+* **Action:** Select sender, receiver, staff name, and list of items to transfer.
 
-#### 10. 📜 Transaction & Processing History
-* **Purpose:** Look up historical logs of all system activities.[cite: 2]
+#### 10. 📋 Branch Order Request
+* **Purpose:** Allow branches to request items from central stock or for admins to review orders.
+* **Action:** Branches submit requests; Admin reviews and processes pending orders here.
+
+#### 11. 📜 Transaction & Processing History
+* **Purpose:** Look up historical logs of all system activities.
 * **Action:** Switch between tabs and download respective Excel reports."""
     },
     "hu": {
@@ -234,6 +246,7 @@ LANG = {
         "menu": "Rendszer Menü",
         "m_overview": "Áttekintés és Készletriasztások",
         "m_import": "Központi Készlet Bevételezés",
+        "m_branch_import": "Egységek Bevételezése",
         "m_edit": "Nyitókészlet Szerkesztése",
         "m_add": "Új Termék Hozzáadása",
         "m_process": "Központi Feldolgozási Napló",
@@ -250,6 +263,7 @@ LANG = {
         "main_stock_table": "Központi Készlet Táblázat",
         "tip_overview": "💡 **Mire való ez a menüpont?** Gyors áttekintés a termékek számáról, az alacsony készlet riasztásokról és az egységek állapotáról.",
         "tip_import": "💡 **Mire való ez a menüpont?** Beszállítóktól érkező alapanyagok bevételezése a központi készletbe.",
+        "tip_branch_import": "💡 **Mire való ez a menüpont?** Új alapanyagok bevételezésének rögzítése közvetlenül az egység raktárába.",
         "tip_edit": "💡 **Mire való ez a menüpont?** A nyitókészlet mennyiségének módosítása (Csak adminisztrátornak, biztonsági jelszó szükséges).",
         "tip_add": "💡 **Mire való ez a menüpont?** Új termék felvétele a központi készlet katalógusába.",
         "tip_process": "💡 **Mire való ez a menüpont?** Nyersanyagok feldolgozása késztermékké a központban, valamint a veszteség rögzítése.",
@@ -262,43 +276,47 @@ LANG = {
         "guide_content": """### 📖 Rendszer Használati Útmutató
 
 #### 1. 📊 Áttekintés és Készletriasztások (Overview)
-* **Cél:** Gyorsan ellenőrizheti az összes tételt, az alacsony készletű termékeket ($\le 5$) és az aktív egységeket.[cite: 2]
-* **Teendő:** Ellenőrizze a táblázatot, és kattintson a **Központi készlet letöltése** gombra a jelentés exportálásához.[cite: 2]
+* **Cél:** Gyorsan ellenőrizheti az összes tételt, az alacsony készletű termékeket ($\le 5$) és az aktív egységeket.
+* **Teendő:** Ellenőrizze a táblázatot, és kattintson a **Központi készlet letöltése** gombra a jelentés exportálásához.
 
 #### 2. 📥 Központi Készlet Bevételezés (Main Import)
-* **Cél:** Beszállítótól érkező új alapanyagok rögzítése a központi raktárba.[cite: 2]
-* **Teendő:** Válassza ki a terméket, adja meg a mennyiséget és a szállítót, majd kattintson a megerősítésre.[cite: 2]
+* **Cél:** Beszállítótól érkező új alapanyagok rögzítése a központi raktárba.
+* **Teendő:** Válassza ki a terméket, adja meg a mennyiséget és a szállítót, majd kattintson a megerősítésre.
 
-#### 3. 📝 Nyitókészlet Szerkesztése (Edit Opening Stock)
-* **Cél:** A termékek eredeti alapmennyiségének módosítása.[cite: 2]
-* **Teendő:** Csak Admin számára, biztonsági jelszó (`264221`) szükséges a módosításhoz.[cite: 2]
+#### 3. 📥 Egységek Bevételezése (Branch Local Import)
+* **Cél:** Új alapanyagok bevételezésének rögzítése közvetlenül az egység raktárába.
+* **Teendő:** Válassza ki az egységet, terméket, mennyiséget és a helyi beszállítót.
 
-#### 4. ➕ Új Termék Hozzáadása (Add New Item)
-* **Cél:** Új árucikk felvétele a nyilvántartási rendszerbe.[cite: 2]
-* **Teendő:** Adja meg a termék nevét, mértékegységét, nyitómennyiségét és a forrást.[cite: 2]
+#### 4. 📝 Nyitókészlet Szerkesztése (Edit Opening Stock)
+* **Cél:** A termékek eredeti alapmennyiségének módosítása.
+* **Teendő:** Csak Admin számára, biztonsági jelszó (`264221`) szükséges a módosításhoz.
 
-#### 5. 🔪 Feldolgozási Napló & Veszteség (Processing Log)
-* **Cél:** Nyersanyagok késztermékké alakításának és a hulladéknak a nyomon követése.[cite: 2]
-* **Teendő:** Válassza ki a dátumot, tételszámot, felhasznált alapanyagot, előállított terméket és a veszteséget.[cite: 2]
+#### 5. ➕ Új Termék Hozzáadása (Add New Item)
+* **Cél:** Új árucikk felvétele a nyilvántartási rendszerbe.
+* **Teendő:** Adja meg a termék nevét, mértékegységét, nyitómennyiségét és a forrást.
 
-#### 6. 🚚 Kiosztás Egységeknek (Branch Distribution)
-* **Cél:** Áruk elosztása a központi raktárból az egyes egységek felé.[cite: 2]
-* **Teendő:** Válassza ki az egységet, a termékeket és a mennyiséget. A rendszer automatikusan vonja le a központból.[cite: 2]
+#### 6. 🔪 Feldolgozási Napló & Veszteség (Processing Log)
+* **Cél:** Nyersanyagok késztermékké alakításának és a hulladéknak a nyomon követése.
+* **Teendő:** Válassza ki a dátumot, tételszámot, felhasznált alapanyagot, előállított terméket és a veszteséget.
 
-#### 7. 🏪 Egységek Saját Készlete (Branch Local Inventory)
-* **Cél:** Az egyes egységek belső készletének nyomon követése.[cite: 2]
-* **Teendő:** Ellenőrizze a készletet és töltse le az Excel jelentést.[cite: 2]
+#### 7. 🚚 Kiosztás Egységeknek (Branch Distribution)
+* **Cél:** Áruk elosztása a központi raktárból az egyes egységek felé.
+* **Teendő:** Válassza ki az egységet, a termékeket és a mennyiséget. A rendszer automatikusan vonja le a központból.
 
-#### 8. 🔄 Egységek Közötti Átadás (Inter-branch Transfer)
-* **Cél:** Belső árumozgások rögzítése az egységek vagy a központ között.[cite: 2]
-* **Teendő:** Válassza ki a küldőt, fogadót, a dolgozót és az átadandó tételeket.[cite: 2]
+#### 8. 🏪 Egységek Saját Készlete (Branch Local Inventory)
+* **Cél:** Az egyes egységek belső készletének nyomon követése.
+* **Teendő:** Ellenőrizze a készletet és töltse le az Excel jelentést.
 
-#### 9. 📋 Egységek Rendelése (Order Request)
-* **Cél:** Egységek rendelési kérelmeinek küldése és adminisztrátori jóváhagyása.[cite: 2]
-* **Teendő:** Az egységek leadják a rendelést; az Admin itt tudja jóváhagyni azokat.[cite: 2]
+#### 9. 🔄 Egységek Közötti Átadás (Inter-branch Transfer)
+* **Cél:** Belső árumozgások rögzítése az egységek vagy a központ között.
+* **Teendő:** Válassza ki a küldőt, fogadót, a dolgozót és az átadandó tételeket.
 
-#### 10. 📜 Tranzakciós Előzmények (History)
-* **Cél:** Korábbi tevékenységek és naplók áttekintése.[cite: 2]
+#### 10. 📋 Egységek Rendelése (Order Request)
+* **Cél:** Egységek rendelési kérelmeinek küldése és adminisztrátori jóváhagyása.
+* **Teendő:** Az egységek leadják a rendelést; az Admin itt tudja jóváhagyni azokat.
+
+#### 11. 📜 Tranzakciós Előzmények (History)
+* **Cél:** Korábbi tevékenységek és naplók áttekintése.
 * **Teendő:** Váltson a fülek között és töltse le az Excel jelentéseket."""
     }
 }
@@ -468,9 +486,11 @@ if st.session_state.role == "Admin":
     menu_options = {
         T["m_overview"]: "overview",
         T["m_import"]: "import",
+        T["m_branch_import"]: "branch_import",
         T["m_edit"]: "edit",
         T["m_add"]: "add",
         T["m_process"]: "process",
+        T["m_branch_process"]: "branch_process",
         T["m_distribute"]: "distribute",
         T["m_branch_inv"]: "branch_inv",
         T["m_transfer"]: "transfer",
@@ -481,6 +501,7 @@ if st.session_state.role == "Admin":
 else:
     menu_options = {
         T["m_branch_inv"]: "branch_inv",
+        T["m_branch_import"]: "branch_import",
         T["m_branch_process"]: "branch_process",
         T["m_transfer"]: "transfer",
         T["m_order"]: "order",
@@ -549,6 +570,33 @@ elif choice == "import":
                 main_stock_df.loc[idx, "Source"] = import_source
                 save_data(main_stock_df, processing_df)
                 st.success("Thành công!")
+                st.rerun()
+
+elif choice == "branch_import":
+    st.subheader(T["m_branch_import"])
+    st.info(T["tip_branch_import"])
+    
+    active_branch = st.session_state.branch_name if st.session_state.role == "Branch" else st.selectbox("Chọn chi nhánh nhập hàng:", BRANCH_LIST)
+    current_b_df = branch_data_dict.get(active_branch, pd.DataFrame(columns=["ItemID", "ItemName", "Unit", "StockQty", "ImportedQty", "UsedQty", "Note"]))
+    
+    with st.form(f"branch_import_form_{active_branch}"):
+        b_item_list = current_b_df["ItemName"].tolist() if not current_b_df.empty else []
+        selected_b_item = st.selectbox("Chọn sản phẩm cần nhập tại chi nhánh:", b_item_list) if b_item_list else None
+        b_import_qty = st.number_input("Số lượng nhập thêm:", min_value=0.0, step=1.0)
+        b_import_source = st.text_input("Nhà cung cấp / Nguồn gốc:", value="Nhà cung cấp địa phương")
+        submitted_b_import = st.form_submit_button("Xác Nhận Nhập Hàng Chi Nhánh")
+        
+        if submitted_b_import and selected_b_item:
+            b_idx = current_b_df[current_b_df["ItemName"] == selected_b_item].index
+            if not b_idx.empty:
+                current_b_df.loc[b_idx, "StockQty"] += b_import_qty
+                current_b_df.loc[b_idx, "ImportedQty"] += b_import_qty
+                current_b_df.loc[b_idx, "Note"] = f"Nhập hàng từ: {b_import_source}"
+                
+                branch_data_dict[active_branch] = current_b_df
+                save_branch_data(branch_data_dict)
+                
+                st.success(f"Nhập hàng thành công cho chi nhánh **{active_branch}**!")
                 st.rerun()
 
 elif choice == "edit":
@@ -628,7 +676,6 @@ elif choice == "branch_process":
     st.subheader(T["m_branch_process"])
     st.info(T["tip_branch_process"])
     
-    # Xác định chi nhánh thực hiện sơ chế
     active_branch = st.session_state.branch_name if st.session_state.role == "Branch" else st.selectbox("Chọn chi nhánh thực hiện sơ chế:", BRANCH_LIST)
     current_b_df = branch_data_dict.get(active_branch, pd.DataFrame(columns=["ItemID", "ItemName", "Unit", "StockQty", "ImportedQty", "UsedQty", "Note"]))
     
@@ -648,7 +695,6 @@ elif choice == "branch_process":
             if not bp_raw or bp_used_qty <= 0:
                 st.error("Vui lòng chọn nguyên liệu hợp lệ và nhập số lượng sử dụng lớn hơn 0!")
             else:
-                # Kiểm tra tồn kho nguyên liệu tại chi nhánh
                 raw_idx = current_b_df[current_b_df["ItemName"] == bp_raw].index
                 if raw_idx.empty:
                     st.error("Không tìm thấy nguyên liệu trong kho chi nhánh!")
@@ -657,11 +703,9 @@ elif choice == "branch_process":
                     if bp_used_qty > current_stock:
                         st.error(f"Số lượng dùng ({bp_used_qty}) vượt quá tồn kho hiện tại của chi nhánh ({current_stock})!")
                     else:
-                        # Trừ nguyên liệu thô khỏi kho chi nhánh & cộng lượng dùng vào UsedQty
                         current_b_df.loc[raw_idx, "StockQty"] -= bp_used_qty
                         current_b_df.loc[raw_idx, "UsedQty"] += bp_used_qty
                         
-                        # Thêm hoặc cập nhật thành phẩm vào kho chi nhánh
                         fin_idx = current_b_df[current_b_df["ItemName"] == bp_finished].index
                         if not fin_idx.empty and bp_finished.strip():
                             current_b_df.loc[fin_idx, "StockQty"] += bp_produced_qty
@@ -678,7 +722,6 @@ elif choice == "branch_process":
                         branch_data_dict[active_branch] = current_b_df
                         save_branch_data(branch_data_dict)
                         
-                        # Lưu lịch sử sơ chế chi nhánh vào file CSV
                         bp_record = {
                             "Date": bp_date.strftime("%Y-%m-%d"),
                             "Branch": active_branch,
