@@ -1,53 +1,16 @@
-
-Gemini
-Új csevegés
-Keresés a csevegésekben
-Könyvtár
-Thêm Icon cho Ứng Dụng Streamlit
-Quản Lý Kho Nhà Hàng & Chi Nhánh
-Restaurant Inventory System Code
-Streamlit App Code Incomplete
-Branch Inventory Management System Update
-Thiết Kế Hệ Thống Quản Lý Nhà Hàng
-Lỗi tải lên tệp Excel
-Tạo chương trình quản lý theo tháng
-Tạo Bảng Kiểm Soát Tiêu Thụ Cốc
-
-Tevékenységek
-Budapest, Magyarország
-Az IP-címe alapján
-Hely frissítése
-Beszélgetés a Geminivel
 import streamlit as st
-
 import pandas as pd
-
 from datetime import datetime
-
 import os
-
 import io
-
 import openpyxl
-
-
-
 st.set_page_config(page_title="Restaurant Inventory & Chain Management System", layout="wide")
-
-
-
 # --- TÙY CHỈNH GIAO DIỆN BẰNG CSS ---
-
 st.markdown("""
-
     <style>
-
     .stApp {
-
         background-color: #f7f9fa;
-
     }
-
     [data-testid="stSidebar"] {
 
         background-color: #b4cfdc;
