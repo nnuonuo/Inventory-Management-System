@@ -110,47 +110,47 @@ LANG = {
         "guide_content": """### 📖 Sổ Tay Hướng Dẫn Sử Dụng Hệ Thống Kho & Chuỗi
 
 #### 1. 📊 Tổng Quan & Cảnh Báo Kho (Overview)
-* **Mục đích:** Xem nhanh tổng số lượng mặt hàng, các sản phẩm đang có nguy cơ hết hàng ($\le 5$) và số lượng chi nhánh.[cite: 1]
-* **Cần làm gì:** Kiểm tra bảng tồn kho chính và bấm nút **Tải xuống bảng tồn kho tổng** để xuất file Excel báo cáo.[cite: 1]
+* **Mục đích:** Xem nhanh tổng số lượng mặt hàng, các sản phẩm đang có nguy cơ hết hàng ($\le 5$) và số lượng chi nhánh.
+* **Cần làm gì:** Kiểm tra bảng tồn kho chính và bấm nút **Tải xuống bảng tồn kho tổng** để xuất file Excel báo cáo.
 
 #### 2. 📥 Nhập Hàng Kho Tổng (Main Stock Import)
-* **Mục đích:** Ghi nhận số lượng nguyên vật liệu mới nhập từ nhà cung cấp vào kho tổng.[cite: 1]
-* **Cần làm gì:** Chọn đúng sản phẩm cần nhập, nhập số lượng thêm và điền tên nhà cung cấp, sau đó bấm **Xác Nhận Nhập Hàng**.[cite: 1]
+* **Mục đích:** Ghi nhận số lượng nguyên vật liệu mới nhập từ nhà cung cấp vào kho tổng.
+* **Cần làm gì:** Chọn đúng sản phẩm cần nhập, nhập số lượng thêm và điền tên nhà cung cấp, sau đó bấm **Xác Nhận Nhập Hàng**.
 
 #### 3. 📥 Nhập Hàng Chi Nhánh (Branch Local Import)
-* **Mục đích:** Ghi nhận số lượng nguyên vật liệu mới nhập trực tiếp tại kho của chi nhánh.[cite: 1]
-* **Cần làm gì:** Chọn chi nhánh, chọn sản phẩm, nhập số lượng và nhà cung cấp địa phương.[cite: 1]
+* **Mục đích:** Ghi nhận số lượng nguyên vật liệu mới nhập trực tiếp tại kho của chi nhánh.
+* **Cần làm gì:** Chọn chi nhánh, chọn sản phẩm, nhập số lượng và nhà cung cấp địa phương.
 
 #### 4. 📝 Sửa Tồn Kho Đầu Kỳ (Edit Opening Stock)
-* **Mục đích:** Điều chỉnh lại số lượng gốc ban đầu của sản phẩm.[cite: 1]
-* **Cần làm gì:** Chỉ dành cho Admin khi kiểm kê kho. Bắt buộc nhập mật khẩu bảo mật (`264221`) để xác nhận thay đổi.[cite: 1]
+* **Mục đích:** Điều chỉnh lại số lượng gốc ban đầu của sản phẩm.
+* **Cần làm gì:** Chỉ dành cho Admin khi kiểm kê kho. Bắt buộc nhập mật khẩu bảo mật để xác nhận thay đổi.
 
 #### 5. ➕ Thêm Sản Phẩm Mới (Add New Item)
-* **Mục đích:** Khai báo một mặt hàng mới vào hệ thống quản lý.[cite: 1]
-* **Cần làm gì:** Nhập tên sản phẩm, chọn đơn vị tính, điền số lượng tồn đầu kỳ và nguồn cung cấp.[cite: 1]
+* **Mục đích:** Khai báo một mặt hàng mới vào hệ thống quản lý.
+* **Cần làm gì:** Nhập tên sản phẩm, chọn đơn vị tính, điền số lượng tồn đầu kỳ và nguồn cung cấp.
 
 #### 6. 🔪 Sơ Chế & Hao Hụt Kho Tổng / Chi Nhánh (Processing Log)
-* **Mục đích:** Quản lý quy trình chế biến nguyên liệu thô thành thành phẩm và ghi nhận phần hao hụt/phế phẩm.[cite: 1]
-* **Cần làm gì:** Chọn nguyên liệu thô bị trừ kho, nhập số lượng dùng, tên thành phẩm, số lượng thu về và lượng hao hụt.[cite: 1]
+* **Mục đích:** Quản lý quy trình chế biến nguyên liệu thô thành thành phẩm và ghi nhận phần hao hụt/phế phẩm.
+* **Cần làm gì:** Chọn nguyên liệu thô bị trừ kho, nhập số lượng dùng, tên thành phẩm, số lượng thu về và lượng hao hụt.
 
 #### 7. 🚚 Cấp Hàng Cho Chi Nhánh (Branch Distribution)
-* **Mục đích:** Phân bổ hàng hóa từ kho tổng xuống các chi nhánh.[cite: 1]
-* **Cần làm gì:** Chọn chi nhánh nhận, chọn sản phẩm và số lượng tương ứng, hệ thống sẽ tự động trừ kho tổng và cộng vào kho chi nhánh.[cite: 1]
+* **Mục đích:** Phân bổ hàng hóa từ kho tổng xuống các chi nhánh.
+* **Cần làm gì:** Chọn chi nhánh nhận, chọn sản phẩm và số lượng tương ứng, hệ thống sẽ tự động trừ kho tổng và cộng vào kho chi nhánh.
 
 #### 8. 🏪 Kho Riêng Chi Nhánh (Branch Local Inventory)
-* **Mục đích:** Theo dõi số lượng tồn kho nội bộ tại từng chi nhánh.[cite: 1]
-* **Cần làm gì:** Kiểm tra hàng tồn và bấm nút tải Excel tương ứng. Có thể tự thêm sản phẩm mua ngoài hoặc chỉnh sửa trực tiếp số liệu (yêu cầu mật khẩu `264221`).[cite: 1]
+* **Mục đích:** Theo dõi số lượng tồn kho nội bộ tại từng chi nhánh.
+* **Cần làm gì:** Kiểm tra hàng tồn và bấm nút tải Excel tương ứng. Có thể tự thêm sản phẩm mua ngoài hoặc chỉnh sửa trực tiếp số liệu (yêu cầu mật khẩu bảo mật).
 
 #### 9. 🔄 Chuyển Hàng Giữa Chi Nhánh (Inter-branch Transfer)
-* **Mục đích:** Ghi nhận việc điều chuyển hàng hóa nội bộ giữa các chi nhánh hoặc giữa chi nhánh với kho tổng.[cite: 1]
-* **Cần làm gì:** Chọn đơn vị gửi, đơn vị nhận, điền tên nhân viên thực hiện và danh sách sản phẩm cần chuyển.[cite: 1]
+* **Mục đích:** Ghi nhận việc điều chuyển hàng hóa nội bộ giữa các chi nhánh hoặc giữa chi nhánh với kho tổng.
+* **Cần làm gì:** Chọn đơn vị gửi, đơn vị nhận, điền tên nhân viên thực hiện và danh sách sản phẩm cần chuyển.
 
 #### 10. 📋 Chi Nhánh Đặt Hàng Kho Tổng (Order Request)
-* **Mục đích:** Cho phép chi nhánh gửi yêu cầu đặt hàng về kho tổng hoặc để Admin duyệt các đơn hàng.[cite: 1]
-* **Cần làm gì:** Chi nhánh điền đơn đặt hàng gửi đi; Admin vào mục này để kiểm tra danh sách chờ duyệt từ các chi nhánh.[cite: 1]
+* **Mục đích:** Cho phép chi nhánh gửi yêu cầu đặt hàng về kho tổng hoặc để Admin duyệt các đơn hàng.
+* **Cần làm gì:** Chi nhánh điền đơn đặt hàng gửi đi; Admin vào mục này để kiểm tra danh sách chờ duyệt từ các chi nhánh.
 
 #### 11. 📜 Xem Lịch Sử Giao Dịch & Sơ Chế (History)
-* **Mục đích:** Tra cứu lại toàn bộ nhật ký hoạt động cũ của hệ thống.[cite: 1]
+* **Mục đích:** Tra cứu lại toàn bộ nhật ký hoạt động cũ của hệ thống.
 * **Cần làm gì:** Chuyển qua lại giữa các tab để xem báo cáo và bấm nút tải Excel tương ứng để lưu trữ."""
     },
     "en": {
@@ -193,47 +193,47 @@ LANG = {
         "guide_content": """### 📖 System User Guide & Manual
 
 #### 1. 📊 Overview & Stock Alerts
-* **Purpose:** Quickly check total items, low stock warnings ($\le 5$), and branch status.[cite: 1]
-* **Action:** Review the main table and click **Download Main Stock (Excel)** to export reports.[cite: 1]
+* **Purpose:** Quickly check total items, low stock warnings ($\le 5$), and branch status.
+* **Action:** Review the main table and click **Download Main Stock (Excel)** to export reports.
 
 #### 2. 📥 Main Stock Import
-* **Purpose:** Record new raw materials imported from suppliers into the central warehouse.[cite: 1]
-* **Action:** Select the product, enter the quantity, specify the supplier, and click **Confirm Import**.[cite: 1]
+* **Purpose:** Record new raw materials imported from suppliers into the central warehouse.
+* **Action:** Select the product, enter the quantity, specify the supplier, and click **Confirm Import**.
 
 #### 3. 📥 Branch Local Import
-* **Purpose:** Record newly imported raw materials directly into the branch inventory.[cite: 1]
-* **Action:** Select branch, item, quantity, and local supplier.[cite: 1]
+* **Purpose:** Record newly imported raw materials directly into the branch inventory.
+* **Action:** Select branch, item, quantity, and local supplier.
 
 #### 4. 📝 Edit Opening Stock
-* **Purpose:** Adjust the baseline initial opening stock of products.[cite: 1]
-* **Action:** Admin only, requires security password (`264221`) to confirm changes.[cite: 1]
+* **Purpose:** Adjust the baseline initial opening stock of products.
+* **Action:** Admin only, requires security password to confirm changes.
 
 #### 5. ➕ Add New Item
-* **Purpose:** Register a brand new product into the inventory system.[cite: 1]
-* **Action:** Enter product name, select unit, set opening stock, and supply source.[cite: 1]
+* **Purpose:** Register a brand new product into the inventory system.
+* **Action:** Enter product name, select unit, set opening stock, and supply source.
 
 #### 6. 🔪 Processing & Waste Log
-* **Purpose:** Manage transformation of raw materials into finished goods and track waste/loss.[cite: 1]
-* **Action:** Select date, batch ID, raw material used, output product, and waste quantity.[cite: 1]
+* **Purpose:** Manage transformation of raw materials into finished goods and track waste/loss.
+* **Action:** Select date, batch ID, raw material used, output product, and waste quantity.
 
 #### 7. 🚚 Branch Distribution
-* **Purpose:** Allocate items from the main stock to individual branches.[cite: 1]
-* **Action:** Choose target branch, select items and quantities. Stock is automatically deducted from main and added to branch.[cite: 1]
+* **Purpose:** Allocate items from the main stock to individual branches.
+* **Action:** Choose target branch, select items and quantities. Stock is automatically deducted from main and added to branch.
 
 #### 8. 🏪 Branch Local Inventory
-* **Purpose:** Track internal stock levels at each branch location.[cite: 1]
-* **Action:** Check stock, download Excel reports, or directly edit data cells using password (`264221`).[cite: 1]
+* **Purpose:** Track internal stock levels at each branch location.
+* **Action:** Check stock, download Excel reports, or directly edit data cells using password.
 
 #### 9. 🔄 Inter-branch Transfer
-* **Purpose:** Record internal stock movements between branches or between branch and central warehouse.[cite: 1]
-* **Action:** Select sender, receiver, staff name, and list of items to transfer.[cite: 1]
+* **Purpose:** Record internal stock movements between branches or between branch and central warehouse.
+* **Action:** Select sender, receiver, staff name, and list of items to transfer.
 
 #### 10. 📋 Branch Order Request
-* **Purpose:** Allow branches to request items from central stock or for admins to review orders.[cite: 1]
-* **Action:** Branches submit requests; Admin reviews and processes pending orders here.[cite: 1]
+* **Purpose:** Allow branches to request items from central stock or for admins to review orders.
+* **Action:** Branches submit requests; Admin reviews and processes pending orders here.
 
 #### 11. 📜 Transaction & Processing History
-* **Purpose:** Look up historical logs of all system activities.[cite: 1]
+* **Purpose:** Look up historical logs of all system activities.
 * **Action:** Switch between tabs and download respective Excel reports."""
     },
     "hu": {
@@ -276,47 +276,47 @@ LANG = {
         "guide_content": """### 📖 Rendszer Használati Útmutató
 
 #### 1. 📊 Áttekintés és Készletriasztások (Overview)
-* **Cél:** Gyorsan ellenőrizheti az összes tételt, az alacsony készletű termékeket ($\le 5$) és az aktív egységeket.[cite: 1]
-* **Teendő:** Ellenőrizze a táblázatot, és kattintson a **Központi készlet letöltése** gombra a jelentés exportálásához.[cite: 1]
+* **Cél:** Gyorsan ellenőrizheti az összes tételt, az alacsony készletű termékeket ($\le 5$) és az aktív egységeket.
+* **Teendő:** Ellenőrizze a táblázatot, és kattintson a **Központi készlet letöltése** gombra a jelentés exportálásához.
 
 #### 2. 📥 Központi Készlet Bevételezés (Main Import)
-* **Cél:** Beszállítótól érkező új alapanyagok rögzítése a központi raktárba.[cite: 1]
-* **Teendő:** Válassza ki a terméket, adja meg a mennyiséget és a szállítót, majd kattintson a megerősítésre.[cite: 1]
+* **Cél:** Beszállítótól érkező új alapanyagok rögzítése a központi raktárba.
+* **Teendő:** Válassza ki a terméket, adja meg a mennyiséget és a szállítót, majd kattintson a megerősítésre.
 
 #### 3. 📥 Egységek Bevételezése (Branch Local Import)
-* **Cél:** Új alapanyagok bevételezésének rögzítése közvetlenül az egység raktárába.[cite: 1]
-* **Teendő:** Válassza ki az egységet, terméket, mennyiséget és a helyi beszállítót.[cite: 1]
+* **Cél:** Új alapanyagok bevételezésének rögzítése közvetlenül az egység raktárába.
+* **Teendő:** Válassza ki az egységet, terméket, mennyiséget és a helyi beszállítót.
 
 #### 4. 📝 Nyitókészlet Szerkesztése (Edit Opening Stock)
-* **Cél:** A termékek eredeti alapmennyiségének módosítása.[cite: 1]
-* **Teendő:** Csak Admin számára, biztonsági jelszó (`264221`) szükséges a módosításhoz.[cite: 1]
+* **Cél:** A termékek eredeti alapmennyiségének módosítása.
+* **Teendő:** Csak Admin számára, biztonsági jelszó szükséges a módosításhoz.
 
 #### 5. ➕ Új Termék Hozzáadása (Add New Item)
-* **Cél:** Új árucikk felvétele a nyilvántartási rendszerbe.[cite: 1]
-* **Teendő:** Adja meg a termék nevét, mértékegységét, nyitómennyiségét és a forrást.[cite: 1]
+* **Cél:** Új árucikk felvétele a nyilvántartási rendszerbe.
+* **Teendő:** Adja meg a termék nevét, mértékegységét, nyitómennyiségét és a forrást.
 
 #### 6. 🔪 Feldolgozási Napló & Veszteség (Processing Log)
-* **Cél:** Nyersanyagok késztermékké alakításának és a hulladéknak a nyomon követése.[cite: 1]
-* **Teendő:** Válassza ki a dátumot, tételszámot, felhasznált alapanyagot, előállított terméket és a veszteséget.[cite: 1]
+* **Cél:** Nyersanyagok késztermékké alakításának és a hulladéknak a nyomon követése.
+* **Teendő:** Válassza ki a dátumot, tételszámot, felhasznált alapanyagot, előállított terméket és a veszteséget.
 
 #### 7. 🚚 Kiosztás Egységeknek (Branch Distribution)
-* **Cél:** Áruk elosztása a központi raktárból az egyes egységek felé.[cite: 1]
-* **Teendő:** Válassza ki az egységet, a termékeket és a mennyiséget. A rendszer automatikusan vonja le a központból.[cite: 1]
+* **Cél:** Áruk elosztása a központi raktárból az egyes egységek felé.
+* **Teendő:** Válassza ki az egységet, a termékeket és a mennyiséget. A rendszer automatikusan vonja le a központból.
 
 #### 8. 🏪 Egységek Saját Készlete (Branch Local Inventory)
-* **Cél:** Az egyes egységek belső készletének nyomon követése és szerkesztése.[cite: 1]
-* **Teendő:** Szerkessze közvetlenül a cellákat, majd adja meg a jelszót (`264221`) a mentéshez.[cite: 1]
+* **Cél:** Az egyes egységek belső készletének nyomon követése és szerkesztése.
+* **Teendő:** Szerkessze közvetlenül a cellákat, majd adja meg a jelszót a mentéshez.
 
 #### 9. 🔄 Egységek Közötti Átadás (Inter-branch Transfer)
-* **Cél:** Belső árumozgások rögzítése az egységek vagy a központ között.[cite: 1]
-* **Teendő:** Válassza ki a küldőt, fogadót, a dolgozót és az átadandó tételeket.[cite: 1]
+* **Cél:** Belső árumozgások rögzítése az egységek vagy a központ között.
+* **Teendő:** Válassza ki a küldőt, fogadót, a dolgozót és az átadandó tételeket.
 
 #### 10. 📋 Egységek Rendelése (Order Request)
-* **Cél:** Egységek rendelési kérelmeinek küldése és adminisztrátori jóváhagyása.[cite: 1]
-* **Teendő:** Az egységek leadják a rendelést; az Admin itt tudja jóváhagyni azokat.[cite: 1]
+* **Cél:** Egységek rendelési kérelmeinek küldése és adminisztrátori jóváhagyása.
+* **Teendő:** Az egységek leadják a rendelést; az Admin itt tudja jóváhagyni azokat.
 
 #### 11. 📜 Tranzakciós Előzmények (History)
-* **Cél:** Korábbi tevékenységek és naplók áttekintése.[cite: 1]
+* **Cél:** Korábbi tevékenységek és naplók áttekintése.
 * **Teendő:** Váltson a fülek között és töltse le az Excel jelentéseket."""
     }
 }
@@ -822,7 +822,7 @@ elif choice == "branch_inv":
     current_b_df = branch_data_dict.get(active_branch, pd.DataFrame(columns=["ItemID", "ItemName", "Unit", "StockQty", "ImportedQty", "UsedQty", "Note"]))
     
     st.markdown(f"### Kho Tồn Của Chi Nhánh: {active_branch}")
-    st.markdown("💡 *Bạn có thể chỉnh sửa trực tiếp các ô trong bảng dưới đây, sau đó nhập mật khẩu (264221) và bấm nút xác định đổi để lưu lại.*")
+    st.markdown("💡 *Bạn có thể chỉnh sửa trực tiếp các ô trong bảng dưới đây, sau đó nhập mật khẩu và bấm nút xác định đổi để lưu lại.*")
 
     with st.form(f"edit_branch_inv_form_{active_branch}"):
         edited_b_df = st.data_editor(
@@ -835,7 +835,7 @@ elif choice == "branch_inv":
         st.markdown("---")
         col_p1, col_p2 = st.columns([2, 1])
         with col_p1:
-            inv_pwd_input = st.text_input("Nhập mật khẩu bảo mật để xác nhận thay đổi (264221):", type="password", key=f"pwd_inv_{active_branch}")
+            inv_pwd_input = st.text_input("Nhập mật khẩu bảo mật để xác nhận thay đổi:", type="password", key=f"pwd_inv_{active_branch}")
         with col_p2:
             st.markdown("<br>", unsafe_allow_html=True)
             submitted_edit_inv = st.form_submit_button("Xác Định Đổi & Lưu Kho")
