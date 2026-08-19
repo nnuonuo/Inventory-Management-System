@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 from datetime import datetime
 import os
+import io
 import openpyxl
 from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
@@ -359,6 +360,21 @@ if choice == "overview":
     st.markdown(f"### {T['main_stock_table']}")
     st.dataframe(main_stock_df, use_container_width=True)
 
+    # --- NÚT TẢI EXCEL CHO BẢNG TỔNG QUAN ---
+    st.markdown("### 📥 Tải Báo Cáo Tổng Kết")
+    output = io.BytesIO()
+    with pd.ExcelWriter(output, engine='openpyxl') as writer:
+        main_stock_df.to_excel(writer, sheet_name='Tong_Ket_Kho_Tong', index=False)
+    excel_data = output.getvalue()
+    
+    st.download_button(
+        label="📥 Tải xuống bảng tồn kho tổng (Excel)",
+        data=excel_data,
+        file_name=f"Tong_Ket_Ton_Kho_Tong_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        use_container_width=True
+    )
+
 elif choice == "import":
     st.subheader(T["m_import"])
     with st.form("import_form"):
@@ -525,9 +541,19 @@ elif choice == "branch_inv":
     st.markdown(f"### Kho Tồn Của Chi Nhánh: {active_branch}")
     st.dataframe(current_b_df, use_container_width=True)
 
+    # Nút tải Excel cho kho chi nhánh
+    output_b = io.BytesIO()
+    with pd.ExcelWriter(output_b, engine='openpyxl') as writer:
+        current_b_df.to_excel(writer, sheet_name=active_branch, index=False)
+    excel_b_data = output_b.getvalue()
+    st.download_button(
+        label=f"📥 Tải xuống kho chi nhánh {active_branch} (Excel)",
+        data=excel_b_data,
+        file_name=f"Kho_Chi_Nhanh_{active_branch}_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    )
+
     st.markdown("---")
-    
-    # 1. Thêm sản phẩm mới vào kho chi nhánh (mua ngoài)
     with st.expander("➕ Tự thêm sản phẩm mới vào kho chi nhánh này (Mua ngoài / Khác)"):
         with st.form(f"add_branch_item_form_{active_branch}"):
             b_new_name = st.text_input("Tên sản phẩm mới:")
@@ -539,74 +565,13 @@ elif choice == "branch_inv":
             if btn_add_b_item and b_new_name.strip():
                 b_auto_id = f"BS-{len(current_b_df)+1:03d}"
                 new_b_row = {
-                    "ItemID": b_auto_id,
-                    "ItemName": b_new_name,
-                    "Unit": b_new_unit,
-                    "StockQty": b_new_stock,
-                    "ImportedQty": b_new_stock,
-                    "UsedQty": 0.0,
-                    "Note": b_new_note
+                    "ItemID": b_auto_id, "ItemName": b_new_name, "Unit": b_new_unit,
+                    "StockQty": b_new_stock, "ImportedQty": b_new_stock, "UsedQty": 0.0, "Note": b_new_note
                 }
                 current_b_df = pd.concat([current_b_df, pd.DataFrame([new_b_row])], ignore_index=True)
                 branch_data_dict[active_branch] = current_b_df
                 save_branch_data(branch_data_dict)
-                st.success(f"Đã thêm sản phẩm **{b_new_name}** vào kho chi nhánh **{active_branch}** thành công!")
-                st.rerun()
-
-    # 2. Ghi nhận sơ chế & hao hụt tại chi nhánh
-    with st.expander("🔪 Sơ chế & Ghi nhận hao hụt tại chi nhánh"):
-        with st.form(f"branch_processing_form_{active_branch}"):
-            bp_date = st.date_input("Ngày sơ chế:", datetime.now())
-            bp_raw = st.selectbox("Chọn nguyên liệu trong kho chi nhánh:", current_b_df["ItemName"].tolist() if not current_b_df.empty else [])
-            bp_used = st.number_input("Số lượng nguyên liệu mang ra sơ chế:", min_value=0.0, step=1.0)
-            bp_finished_name = st.text_input("Tên thành phẩm thu được sau sơ chế:")
-            bp_prod_qty = st.number_input("Số lượng thành phẩm thu được:", min_value=0.0, step=1.0)
-            bp_waste = st.number_input("Hao hụt / Phế phẩm bỏ đi:", min_value=0.0, step=1.0)
-            bp_note = st.text_input("Ghi chú chi tiết:")
-            btn_save_bp = st.form_submit_button("Lưu Sơ Chế & Trừ Kho")
-            
-            if btn_save_bp and bp_raw:
-                b_idx = current_b_df[current_b_df["ItemName"] == bp_raw].index
-                if not b_idx.empty:
-                    current_b_df.loc[b_idx, "UsedQty"] += bp_used
-                    current_b_df.loc[b_idx, "StockQty"] = max(0.0, current_b_df.loc[b_idx, "StockQty"] - bp_used)
-                    branch_data_dict[active_branch] = current_b_df
-                    save_branch_data(branch_data_dict)
-                    
-                    bp_record = {
-                        "Date": bp_date.strftime("%Y-%m-%d"),
-                        "Branch": active_branch,
-                        "RawMaterial": bp_raw,
-                        "UsedQuantity": bp_used,
-                        "FinishedProduct": bp_finished_name,
-                        "ProducedQuantity": bp_prod_qty,
-                        "WasteLoss": bp_waste,
-                        "Note": bp_note
-                    }
-                    b_proc_df = pd.read_csv(BRANCH_PROC_FILE)
-                    b_proc_df = pd.concat([b_proc_df, pd.DataFrame([bp_record])], ignore_index=True)
-                    b_proc_df.to_csv(BRANCH_PROC_FILE, index=False)
-                    
-                    st.success(f"Đã ghi nhận sơ chế và cập nhật trừ kho chi nhánh **{active_branch}** thành công!")
-                    st.rerun()
-
-    # 3. Cập nhật xuất dùng thông thường tại chi nhánh
-    st.markdown("#### Cập nhật xuất dùng hàng ngày tại chi nhánh")
-    with st.form(f"update_branch_stock_{active_branch}"):
-        b_items = current_b_df["ItemName"].tolist() if not current_b_df.empty else []
-        sel_b_item = st.selectbox("Chọn mặt hàng xuất dùng:", b_items) if b_items else st.selectbox("Không có nguyên liệu", [])
-        used_amount = st.number_input("Số lượng xuất dùng:", min_value=0.0, step=1.0)
-        b_note = st.text_input("Ghi chú xuất dùng:")
-        btn_save_b = st.form_submit_button("Cập Nhật Xuất Dùng (Trừ Tồn Kho)")
-        
-        if btn_save_b and sel_b_item:
-            b_idx = current_b_df[current_b_df["ItemName"] == sel_b_item].index
-            if not b_idx.empty:
-                current_b_df.loc[b_idx, "UsedQty"] += used_amount
-                current_b_df.loc[b_idx, "StockQty"] = max(0.0, current_b_df.loc[b_idx, "StockQty"] - used_amount)
-                branch_data_dict[active_branch] = current_b_df
-                save_branch_data(branch_data_dict)
-                st.success("Cập nhật kho chi nhánh thành công!")
+                st.success(f"Đã thêm sản phẩm thành công!")
                 st.rerun()
 
 elif choice == "transfer":
@@ -669,41 +634,29 @@ elif choice.startswith("🔴") or choice == "order":
     if st.session_state.role == "Branch":
         st.markdown(f"Giao diện đặt hàng cho chi nhánh: **{st.session_state.branch_name}**")
         with st.form("branch_order_form"):
-            order_item = st.selectbox("Chọn sản phẩm muốn đặt:", main_stock_df["ItemName"].tolist() if not main_stock_df.empty else [])
-            col_o1, col_o2 = st.columns([2, 1])
-            with col_o1:
-                order_qty = st.number_input("Số lượng đặt:", min_value=1.0, step=1.0)
-            with col_o2:
-                order_unit = st.selectbox("Đơn vị:", UNIT_LIST)
-            order_note = st.text_area("Ghi chú thêm cho Kho Tổng:")
-            submitted_order = st.form_submit_button("Gửi Yêu Cầu Đặt Hàng")
-            if submitted_order:
-                new_order = {
+            o_item = st.selectbox("Chọn mặt hàng cần đặt:", main_stock_df["ItemName"].tolist() if not main_stock_df.empty else [])
+            o_qty = st.number_input("Số lượng đặt:", min_value=0.0, step=1.0)
+            o_unit = st.selectbox("Đơn vị:", UNIT_LIST)
+            o_note = st.text_input("Ghi chú / Yêu cầu thêm:")
+            btn_submit_order = st.form_submit_button("Gửi Đơn Đặt Hàng")
+            
+            if btn_submit_order and o_qty > 0:
+                ord_df = pd.read_csv(ORDER_FILE)
+                new_ord = {
                     "OrderDate": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "Branch": st.session_state.branch_name,
-                    "ItemName": order_item, "Unit": order_unit,
-                    "Quantity": order_qty, "Status": "Đang chờ duyệt", "Note": order_note
+                    "ItemName": o_item, "Unit": o_unit,
+                    "Quantity": o_qty, "Status": "Chờ duyệt", "Note": o_note
                 }
-                order_df = pd.read_csv(ORDER_FILE)
-                order_df = pd.concat([order_df, pd.DataFrame([new_order])], ignore_index=True)
-                order_df.to_csv(ORDER_FILE, index=False)
-                st.success("Gửi yêu cầu đặt hàng thành công!")
+                ord_df = pd.concat([ord_df, pd.DataFrame([new_ord])], ignore_index=True)
+                ord_df.to_csv(ORDER_FILE, index=False)
+                st.success("Đã gửi đơn đặt hàng tới kho tổng thành công!")
                 st.rerun()
     else:
-        order_df = pd.read_csv(ORDER_FILE)
-        if order_df.empty:
-            st.info("Chưa có đơn hàng nào.")
-        else:
-            st.dataframe(order_df, use_container_width=True)
-            with st.form("update_order_form"):
-                order_idx = st.number_input("Nhập số thứ tự dòng đơn hàng cần xử lý:", min_value=0, max_value=max(0, len(order_df)-1), step=1)
-                new_status = st.selectbox("Đổi trạng thái thành:", ["Đang chờ duyệt", "Đã duyệt", "Từ chối"])
-                submitted_update = st.form_submit_button("Cập Nhật Trạng Thái Đơn")
-                if submitted_update:
-                    order_df.loc[order_idx, "Status"] = new_status
-                    order_df.to_csv(ORDER_FILE, index=False)
-                    st.success("Cập nhật trạng thái thành công!")
-                    st.rerun()
+        st.markdown("### Danh Sách Đơn Đặt Hàng Từ Các Chi Nhánh (Admin Quản Lý)")
+        if os.path.exists(ORDER_FILE):
+            ord_df = pd.read_csv(ORDER_FILE)
+            st.dataframe(ord_df, use_container_width=True)
 
 elif choice == "guide":
     st.subheader(T["m_guide"])
