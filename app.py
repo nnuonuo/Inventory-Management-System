@@ -1445,7 +1445,7 @@ Tôi đã đảm bảo rằng tính năng tải Excel sử dụng io.BytesIO và
 
 A Gemini nem ember. Hibázhat (többek között személyekkel kapcsolatban is), ezért ellenőrizze a válaszait. Az Ön adatainak védelme és a GeminiÚj ablakban nyílik meg.
 
-Elemzés…
+Elemzés
 import streamlit as st
 import pandas as pd
 from datetime import datetime
