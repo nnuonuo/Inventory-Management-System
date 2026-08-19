@@ -919,12 +919,13 @@ elif choice == "history":
 
 elif choice == "guide":
     st.markdown(T["guide_content"])
-    elif choice == "history":
-    # Kiểm tra nếu role không phải là Admin thì thông báo lỗi hoặc từ chối truy cập
+
+
+
+elif choice == "history":
     if st.session_state.get("role") != "Admin":
         st.error("🚫 Bạn không có quyền truy cập vào mục lịch sử này. Khu vực này chỉ dành cho Admin.")
     else:
-        # Toàn bộ code lịch sử giữ nguyên ở đây
         st.subheader(T["m_history"])
         st.info(T["tip_history"])
         
@@ -985,3 +986,10 @@ elif choice == "guide":
                 )
             else:
                 st.warning("Chưa có dữ liệu chuyển hàng.")
+
+if st.session_state.get("role") == "Admin":
+    menu_options = ["Tổng Quan", "Kho Chi Nhánh", "Chuyển Hàng", "Lịch Sử"]
+else:
+    menu_options = ["Tổng Quan", "Kho Chi Nhánh", "Đặt Hàng"]
+
+choice = st.radio("Chọn chức năng:", menu_options)
