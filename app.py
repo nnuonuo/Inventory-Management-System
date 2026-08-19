@@ -4,8 +4,6 @@ from datetime import datetime
 import os
 import io
 import openpyxl
-from openpyxl.styles import Font, PatternFill, Alignment, Border, Side
-from openpyxl.utils import get_column_letter
 
 st.set_page_config(page_title="Restaurant Inventory & Chain Management System", layout="wide")
 
@@ -95,10 +93,20 @@ LANG = {
         "low_stock_warn": "Cảnh báo tồn kho thấp",
         "total_branches": "Tổng số chi nhánh hoạt động",
         "main_stock_table": "Bảng Tồn Kho Kho Tổng (Main Stock)",
+        "tip_overview": "💡 **Mục này làm gì?** Xem nhanh tổng số lượng mặt hàng, các sản phẩm tồn kho thấp cần chú ý và thông tin chuỗi.",
+        "tip_import": "💡 **Mục này làm gì?** Ghi nhận số lượng nguyên vật liệu mới nhập từ nhà cung cấp vào kho tổng.",
+        "tip_edit": "💡 **Mục này làm gì?** Điều chỉnh lại tồn kho đầu kỳ của sản phẩm (Dành riêng cho Admin, yêu cầu mật khẩu bảo mật).",
+        "tip_add": "💡 **Mục này làm gì?** Khai báo sản phẩm mới vào danh mục quản lý của kho tổng.",
+        "tip_process": "💡 **Mục này làm gì?** Ghi nhận quá trình sơ chế nguyên liệu thô thành thành phẩm và hao hụt phát sinh tại kho tổng.",
+        "tip_distribute": "💡 **Mục này làm gì?** Phân bổ và cấp phát hàng hóa từ kho tổng xuống các chi nhánh trong hệ thống.",
+        "tip_branch_inv": "💡 **Mục này làm gì?** Quản lý số lượng tồn kho nội bộ tại từng chi nhánh cụ thể.",
+        "tip_transfer": "💡 **Mục này làm gì?** Ghi nhận hoạt động điều chuyển hàng hóa qua lại giữa các đơn vị nội bộ.",
+        "tip_order": "💡 **Mục này làm gì?** Quản lý các phiếu đặt hàng từ chi nhánh gửi về kho tổng để xét duyệt.",
+        "tip_history": "💡 **Mục này làm gì?** Xem lại toàn bộ nhật ký giao dịch, cấp hàng, sơ chế và chuyển nội bộ kèm theo tùy chọn tải Excel.",
         "guide_content": """### 📖 Sổ Tay Hướng Dẫn Sử Dụng Hệ Thống Kho & Chuỗi
 
 #### 1. 📊 Tổng Quan & Cảnh Báo Kho (Overview)
-* **Mục đích:** Xem nhanh tổng số lượng mặt hàng, các sản phẩm đang có nguy cơ hết hàng (tồn kho thấp $\le 5$) và số lượng chi nhánh.
+* **Mục đích:** Xem nhanh tổng số lượng mặt hàng, các sản phẩm đang có nguy cơ hết hàng ($\le 5$) và số lượng chi nhánh.
 * **Cần làm gì:** Kiểm tra bảng tồn kho chính và bấm nút **Tải xuống bảng tồn kho tổng** để xuất file Excel báo cáo.
 
 #### 2. 📥 Nhập Hàng Kho Tổng (Main Stock Import)
@@ -160,7 +168,57 @@ LANG = {
         "low_stock_warn": "Low Stock Alerts",
         "total_branches": "Active Branches",
         "main_stock_table": "Main Inventory Stock Table",
-        "guide_content": "### User Guide\n* **Administrator:** Full control over main stock, branch inventories, imports, and distribution.\n* **Branch:** Manage local inventory, add local items, branch processing/waste log, internal transfers, and place orders."
+        "tip_overview": "💡 **What does this do?** Quickly view total items, low stock alerts, and branch status.",
+        "tip_import": "💡 **What does this do?** Record newly imported raw materials from suppliers into the main stock.",
+        "tip_edit": "💡 **What does this do?** Adjust the opening stock quantity of items (Admin only, requires security password).",
+        "tip_add": "💡 **What does this do?** Register a new product into the main inventory catalog.",
+        "tip_process": "💡 **What does this do?** Record the processing of raw materials into finished goods and waste/loss tracking.",
+        "tip_distribute": "💡 **What does this do?** Allocate and distribute goods from the main stock down to branch locations.",
+        "tip_branch_inv": "💡 **What does this do?** Manage internal stock levels at each specific branch location.",
+        "tip_transfer": "💡 **What does this do?** Record internal stock transfers between branches or between branches and the main stock.",
+        "tip_order": "💡 **What does this do?** Manage order requests sent from branches to the main stock for approval.",
+        "tip_history": "💡 **What does this do?** Review full activity history, distribution logs, processing logs, and internal transfers with Excel export options.",
+        "guide_content": """### 📖 System User Guide & Manual
+
+#### 1. 📊 Overview & Stock Alerts
+* **Purpose:** Quickly check total items, low stock warnings ($\le 5$), and branch status.
+* **Action:** Review the main table and click **Download Main Stock (Excel)** to export reports.
+
+#### 2. 📥 Main Stock Import
+* **Purpose:** Record new raw materials imported from suppliers into the central warehouse.
+* **Action:** Select the product, enter the quantity, specify the supplier, and click **Confirm Import**.
+
+#### 3. 📝 Edit Opening Stock
+* **Purpose:** Adjust the baseline initial opening stock of products.
+* **Action:** Admin only, requires security password (`264221`) to confirm changes.
+
+#### 4. ➕ Add New Item
+* **Purpose:** Register a brand new product into the inventory system.
+* **Action:** Enter product name, select unit, set opening stock, and supply source.
+
+#### 5. 🔪 Processing & Waste Log
+* **Purpose:** Manage transformation of raw materials into finished goods and track waste/loss.
+* **Action:** Select date, batch ID, raw material used, output product, and waste quantity.
+
+#### 6. 🚚 Branch Distribution
+* **Purpose:** Allocate items from the main stock to individual branches.
+* **Action:** Choose target branch, select items and quantities. Stock is automatically deducted from main and added to branch.
+
+#### 7. 🏪 Branch Local Inventory
+* **Purpose:** Track internal stock levels at each branch location.
+* **Action:** Check stock or download Excel reports. Branch staff can add local purchased items using the expander below.
+
+#### 8. 🔄 Inter-branch Transfer
+* **Purpose:** Record internal stock movements between branches or between branch and central warehouse.
+* **Action:** Select sender, receiver, staff name, and list of items to transfer.
+
+#### 9. 📋 Branch Order Request
+* **Purpose:** Allow branches to request items from central stock or for admins to review orders.
+* **Action:** Branches submit requests; Admin reviews and processes pending orders here.
+
+#### 10. 📜 Transaction & Processing History
+* **Purpose:** Look up historical logs of all system activities.
+* **Action:** Switch between tabs (Distribution, Processing, Transfers) and download respective Excel reports."""
     },
     "hu": {
         "login_title": "Éttermi Készletkezelő Bejelentkezés",
@@ -185,7 +243,57 @@ LANG = {
         "low_stock_warn": "Alacsony készlet riasztás",
         "total_branches": "Aktív egységek",
         "main_stock_table": "Központi Készlet Táblázat",
-        "guide_content": "### Használati Útmutató\n* **Admin:** Teljes körű vezérlés.\n* **Egység:** Saját helyi készlet kezelése."
+        "tip_overview": "💡 **Mire való ez a menüpont?** Gyors áttekintés a termékek számáról, az alacsony készlet riasztásokról és az egységek állapotáról.",
+        "tip_import": "💡 **Mire való ez a menüpont?** Beszállítóktól érkező alapanyagok bevételezése a központi készletbe.",
+        "tip_edit": "💡 **Mire való ez a menüpont?** A nyitókészlet mennyiségének módosítása (Csak adminisztrátornak, biztonsági jelszó szükséges).",
+        "tip_add": "💡 **Mire való ez a menüpont?** Új termék felvétele a központi készlet katalógusába.",
+        "tip_process": "💡 **Mire való ez a menüpont?** Nyersanyagok feldolgozása késztermékké, valamint a veszteség/hulladék rögzítése.",
+        "tip_distribute": "💡 **Mire való ez a menüpont?** Áruk kiosztása és átszállítása a központi raktárból az egységekbe.",
+        "tip_branch_inv": "💡 **Mire való ez a menüpont?** Az egyes egységek belső készletszintjének kezelése.",
+        "tip_transfer": "💡 **Mire való ez a menüpont?** Belső árumozgások és átadások rögzítése az egységek között.",
+        "tip_order": "💡 **Mire való ez a menüpont?** Az egységek által a központ felé küldött rendelési kérelmek kezelése és jóváhagyása.",
+        "tip_history": "💡 **Mire való ez a menüpont?** Teljes tranzakciós előzmények, kiosztási naplók, feldolgozási naplók és belső átadások megtekintése Excel export lehetőséggel.",
+        "guide_content": """### 📖 Rendszer Használati Útmutató
+
+#### 1. 📊 Áttekintés és Készletriasztások (Overview)
+* **Cél:** Gyorsan ellenőrizheti az összes tételt, az alacsony készletű termékeket ($\le 5$) és az aktív egységeket.
+* **Teendő:** Ellenőrizze a táblázatot, és kattintson a **Központi készlet letöltése** gombra a jelentés exportálásához.
+
+#### 2. 📥 Központi Készlet Bevételezés (Main Import)
+* **Cél:** Beszállítótól érkező új alapanyagok rögzítése a központi raktárba.
+* **Teendő:** Válassza ki a terméket, adja meg a mennyiséget és a szállítót, majd kattintson a megerősítésre.
+
+#### 3. 📝 Nyitókészlet Szerkesztése (Edit Opening Stock)
+* **Cél:** A termékek eredeti alapmennyiségének módosítása.
+* **Teendő:** Csak Admin számára, biztonsági jelszó (`264221`) szükséges a módosításhoz.
+
+#### 4. ➕ Új Termék Hozzáadása (Add New Item)
+* **Cél:** Új árucikk felvétele a nyilvántartási rendszerbe.
+* **Teendő:** Adja meg a termék nevét, mértékegységét, nyitómennyiségét és a forrást.
+
+#### 5. 🔪 Feldolgozási Napló & Veszteség (Processing Log)
+* **Cél:** Nyersanyagok késztermékké alakításának és a hulladéknak a nyomon követése.
+* **Teendő:** Válassza ki a dátumot, tételszámot, felhasznált alapanyagot, előállított terméket és a veszteséget.
+
+#### 6. 🚚 Kiosztás Egységeknek (Branch Distribution)
+* **Cél:** Áruk elosztása a központi raktárból az egyes egységek felé.
+* **Teendő:** Válassza ki az egységet, a termékeket és a mennyiséget. A rendszer automatikusan vonja le a központból.
+
+#### 7. 🏪 Egységek Saját Készlete (Branch Local Inventory)
+* **Cél:** Az egyes egységek belső készletének nyomon követése.
+* **Cél & Teendő:** Ellenőrizze a készletet és töltse le az Excel jelentést. Új helyi termékek is hozzáadhatók.
+
+#### 8. 🔄 Egységek Közötti Átadás (Inter-branch Transfer)
+* **Cél:** Belső árumozgások rögzítése az egységek vagy a központ között.
+* **Teendő:** Válassza ki a küldőt, fogadót, a dolgozót és az átadandó tételeket.
+
+#### 9. 📋 Egységek Rendelése (Order Request)
+* **Cél:** Egységek rendelési kérelmeinek küldése és adminisztrátori jóváhagyása.
+* **Teendő:** Az egységek leadják a rendelést; az Admin itt tudja jóváhagyni azokat.
+
+#### 10. 📜 Tranzakciós Előzmények (History)
+* **Cél:** Korábbi tevékenységek és naplók áttekintése.
+* **Teendő:** Váltson a fülek között (Kiosztás, Feldolgozás, Átadás) és töltse le az Excel jelentéseket."""
     }
 }
 
@@ -339,7 +447,7 @@ if os.path.exists(ORDER_FILE):
     try:
         df_check_order = pd.read_csv(ORDER_FILE)
         if not df_check_order.empty and "Status" in df_check_order.columns:
-            pending_order_count = len(df_check_order[df_check_order["Status"].str.contains("chờ", case=False, na=False)])
+            pending_order_count = len(df_check_order[df_check_order["Status"].str.contains("chờ|pending|vár", case=False, na=False)])
     except:
         pass
 
@@ -347,7 +455,7 @@ st.sidebar.title(T["menu"])
 
 order_menu_label = T["m_order"]
 if st.session_state.role == "Admin" and pending_order_count > 0:
-    order_menu_label = f"🔴 {T['m_order']} ({pending_order_count} chờ duyệt)"
+    order_menu_label = f"🔴 {T['m_order']} ({pending_order_count})"
 
 if st.session_state.role == "Admin":
     menu_options = {
@@ -384,7 +492,7 @@ branch_data_dict = load_branch_data()
 
 if choice == "overview":
     st.subheader(T["m_overview"])
-    st.info("💡 **Mục này làm gì?** Xem nhanh tổng quan số lượng mặt hàng, các sản phẩm tồn kho thấp cần chú ý và thông tin chuỗi.")
+    st.info(T["tip_overview"])
     
     total_items = len(main_stock_df)
     low_stock_items = len(main_stock_df[main_stock_df["ClosingStock"] <= 5])
@@ -401,7 +509,6 @@ if choice == "overview":
     st.markdown(f"### {T['main_stock_table']}")
     st.dataframe(main_stock_df, use_container_width=True)
 
-    # Nút tải Excel tổng quan kho tổng
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         main_stock_df.to_excel(writer, sheet_name='Tong_Ket_Kho_Tong', index=False)
@@ -417,7 +524,7 @@ if choice == "overview":
 
 elif choice == "import":
     st.subheader(T["m_import"])
-    st.info("💡 **Mục này làm gì?** Ghi nhận số lượng nguyên vật liệu mới nhập từ nhà cung cấp vào kho tổng.")
+    st.info(T["tip_import"])
     
     with st.form("import_form"):
         item_list = main_stock_df["ItemName"].tolist() if not main_stock_df.empty else []
@@ -436,7 +543,7 @@ elif choice == "import":
 
 elif choice == "edit":
     st.subheader(T["m_edit"])
-    st.info("💡 **Mục này làm gì?** Điều chỉnh lại tồn kho đầu kỳ của sản phẩm (Dành riêng cho Admin, yêu cầu mật khẩu bảo mật).")
+    st.info(T["tip_edit"])
     
     with st.form("edit_stock_form"):
         item_list = main_stock_df["ItemName"].tolist() if not main_stock_df.empty else []
@@ -457,7 +564,7 @@ elif choice == "edit":
 
 elif choice == "add":
     st.subheader(T["m_add"])
-    st.info("💡 **Mục này làm gì?** Khai báo sản phẩm mới vào danh mục quản lý của kho tổng.")
+    st.info(T["tip_add"])
     
     auto_id = f"SP{len(main_stock_df)+1:03d}" if not main_stock_df.empty else "SP001"
     with st.form("add_item_form"):
@@ -480,7 +587,7 @@ elif choice == "add":
 
 elif choice == "process":
     st.subheader(T["m_process"])
-    st.info("💡 **Mục này làm gì?** Ghi nhận quá trình sơ chế nguyên liệu thô thành thành phẩm và hao hụt phát sinh tại kho tổng.")
+    st.info(T["tip_process"])
     
     with st.form("process_form"):
         p_date = st.date_input("Ngày sơ chế:", datetime.now())
@@ -509,7 +616,7 @@ elif choice == "process":
 
 elif choice == "distribute":
     st.subheader(T["m_distribute"])
-    st.info("💡 **Mục này làm gì?** Phân bổ và cấp phát hàng hóa từ kho tổng xuống các chi nhánh trong hệ thống.")
+    st.info(T["tip_distribute"])
     
     with st.form("distribute_form"):
         d_branch = st.selectbox("Chọn chi nhánh nhận hàng:", BRANCH_LIST)
@@ -580,7 +687,7 @@ elif choice == "distribute":
 
 elif choice == "branch_inv":
     st.subheader(T["m_branch_inv"])
-    st.info("💡 **Mục này làm gì?** Quản lý số lượng tồn kho nội bộ tại từng chi nhánh cụ thể.")
+    st.info(T["tip_branch_inv"])
     
     if st.session_state.role == "Admin":
         active_branch = st.selectbox("Chọn chi nhánh để quản lý kho:", BRANCH_LIST)
@@ -593,7 +700,6 @@ elif choice == "branch_inv":
     st.markdown(f"### Kho Tồn Của Chi Nhánh: {active_branch}")
     st.dataframe(current_b_df, use_container_width=True)
 
-    # Nút tải Excel cho kho chi nhánh
     output_b = io.BytesIO()
     with pd.ExcelWriter(output_b, engine='openpyxl') as writer:
         current_b_df.to_excel(writer, sheet_name=active_branch, index=False)
@@ -628,7 +734,7 @@ elif choice == "branch_inv":
 
 elif choice == "transfer":
     st.subheader(T["m_transfer"])
-    st.info("💡 **Mục này làm gì?** Ghi nhận hoạt động điều chuyển hàng hóa qua lại giữa các đơn vị nội bộ.")
+    st.info(T["tip_transfer"])
     
     transfer_units = BRANCH_LIST + ["Kho Tổng"]
     with st.form("transfer_form"):
@@ -685,7 +791,7 @@ elif choice == "transfer":
 
 elif choice.startswith("🔴") or choice == "order":
     st.subheader(T["m_order"])
-    st.info("💡 **Mục này làm gì?** Quản lý các phiếu đặt hàng từ chi nhánh gửi về kho tổng để xét duyệt.")
+    st.info(T["tip_order"])
     
     if st.session_state.role == "Branch":
         st.markdown(f"Giao diện đặt hàng cho chi nhánh: **{st.session_state.branch_name}**")
@@ -716,7 +822,7 @@ elif choice.startswith("🔴") or choice == "order":
 
 elif choice == "history":
     st.subheader(T["m_history"])
-    st.info("💡 **Mục này làm gì?** Xem lại toàn bộ nhật ký giao dịch, cấp hàng, sơ chế và chuyển nội bộ kèm theo tùy chọn tải Excel.")
+    st.info(T["tip_history"])
     
     tab1, tab2, tab3 = st.tabs([
         "📦 Lịch Sử Cấp Hàng Kho Tổng", 
@@ -805,5 +911,4 @@ elif choice == "history":
             st.info("Chưa có dữ liệu lịch sử chuyển hàng nội bộ.")
 
 elif choice == "guide":
-    st.subheader(T["m_guide"])
     st.markdown(T["guide_content"])
