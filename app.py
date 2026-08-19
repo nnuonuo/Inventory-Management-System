@@ -853,33 +853,40 @@ elif choice == "history":
 
     with tab2:
         st.markdown("### Lịch sử sơ chế nguyên liệu & hao hụt")
-        out_proc = io.BytesIO()
         has_proc_data = False
-        
-        with pd.ExcelWriter(out_proc, engine='openpyxl') as proc_writer:
-            if os.path.exists(BRANCH_PROC_FILE):
+        df_b_proc = pd.DataFrame()
+        df_main_proc = pd.DataFrame()
+
+        if os.path.exists(BRANCH_PROC_FILE):
+            try:
                 df_b_proc = pd.read_csv(BRANCH_PROC_FILE)
                 if st.session_state.role == "Branch":
                     df_b_proc = df_b_proc[df_b_proc["Branch"] == st.session_state.branch_name]
-                
                 if not df_b_proc.empty:
                     st.markdown("#### Sơ chế tại các Chi nhánh")
                     st.dataframe(df_b_proc, use_container_width=True)
-                    df_b_proc.to_excel(proc_writer, sheet_name='SoChe_ChiNhanh', index=False)
                     has_proc_data = True
-                
-            if st.session_state.role == "Admin" and os.path.exists(DATA_FILE):
-                try:
-                    df_main_proc = pd.read_excel(DATA_FILE, sheet_name="ProcessingLog")
-                    if not df_main_proc.empty:
-                        st.markdown("#### Sơ chế tại Kho Tổng")
-                        st.dataframe(df_main_proc, use_container_width=True)
-                        df_main_proc.to_excel(proc_writer, sheet_name='SoChe_KhoTong', index=False)
-                        has_proc_data = True
-                except:
-                    pass
+            except:
+                pass
+            
+        if st.session_state.role == "Admin" and os.path.exists(DATA_FILE):
+            try:
+                df_main_proc = pd.read_excel(DATA_FILE, sheet_name="ProcessingLog")
+                if not df_main_proc.empty:
+                    st.markdown("#### Sơ chế tại Kho Tổng")
+                    st.dataframe(df_main_proc, use_container_width=True)
+                    has_proc_data = True
+            except:
+                pass
 
         if has_proc_data:
+            out_proc = io.BytesIO()
+            with pd.ExcelWriter(out_proc, engine='openpyxl') as proc_writer:
+                if not df_b_proc.empty:
+                    df_b_proc.to_excel(proc_writer, sheet_name='SoChe_ChiNhanh', index=False)
+                if not df_main_proc.empty:
+                    df_main_proc.to_excel(proc_writer, sheet_name='SoChe_KhoTong', index=False)
+            
             st.download_button(
                 label="📥 Tải xuống lịch sử sơ chế & hao hụt (Excel)",
                 data=out_proc.getvalue(),
