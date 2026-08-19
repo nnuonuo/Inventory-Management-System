@@ -2127,15 +2127,10 @@ T = LANG[current_lang_key]
 st.sidebar.header("Ngôn Ngữ / Language")
 
 selected_lang_ui = st.sidebar.selectbox(
-
     "Chọn ngôn ngữ hiển thị:", 
-
     ["Tiếng Việt", "English", "Magyar"], 
-
-    index=0 if current_lang_key == "vi" else (1 if current_lang_key == "en" else 2),
-
-    key="ui_lang_select"
-
+    index=0,
+    key="unique_sidebar_lang_selector"  
 )
 
 new_lang_key = "vi" if selected_lang_ui == "Tiếng Việt" else ("en" if selected_lang_ui == "English" else "hu")
