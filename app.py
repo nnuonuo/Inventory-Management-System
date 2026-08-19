@@ -836,6 +836,30 @@ elif choice == "branch_inv":
     )
 
     st.markdown("---")
+    
+    # CHỈ CHO PHÉP ADMIN SỬA TỒN KHO CHI NHÁNH KHI NHẬP MẬT KHẨU HOẶC ĐĂNG NHẬP ADMIN
+    if st.session_state.role == "Admin":
+        with st.expander("🛠️ Sửa Tồn Kho / Đầu Kỳ Tại Chi Nhánh Này (Dành cho Admin)"):
+            with st.form(f"edit_branch_stock_form_{active_branch}"):
+                b_item_list_edit = current_b_df["ItemName"].tolist() if not current_b_df.empty else []
+                selected_edit_b_item = st.selectbox("Chọn sản phẩm cần sửa tồn kho:", b_item_list_edit) if b_item_list_edit else None
+                new_b_stock_val = st.number_input("Số lượng tồn kho mới:", min_value=0.0, step=1.0)
+                edit_b_pwd = st.text_input("Nhập mật khẩu bảo mật Admin:", type="password")
+                submitted_edit_b = st.form_submit_button("Xác Nhận Sửa Tồn Kho Chi Nhánh")
+                
+                if submitted_edit_b:
+                    if edit_b_pwd != SECRET_ACTION_PWD:
+                        st.error("Sai mật khẩu xác nhận!")
+                    elif selected_edit_b_item:
+                        b_idx = current_b_df[current_b_df["ItemName"] == selected_edit_b_item].index
+                        if not b_idx.empty:
+                            current_b_df.loc[b_idx, "StockQty"] = new_b_stock_val
+                            current_b_df.loc[b_idx, "Note"] = "Admin điều chỉnh tồn kho"
+                            branch_data_dict[active_branch] = current_b_df
+                            save_branch_data(branch_data_dict)
+                            st.success(f"Đã cập nhật tồn kho chi nhánh **{active_branch}** thành công!")
+                            st.rerun()
+    
     with st.expander("➕ Tự thêm sản phẩm mới vào kho chi nhánh này (Mua ngoài / Khác)"):
         with st.form(f"add_branch_item_form_{active_branch}"):
             b_new_name = st.text_input("Tên sản phẩm mới:")
