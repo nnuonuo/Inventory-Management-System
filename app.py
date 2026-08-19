@@ -89,14 +89,53 @@ LANG = {
         "m_branch_inv": "Kho Riêng Chi Nhánh",
         "m_transfer": "Chuyển Hàng Giữa Chi Nhánh",
         "m_order": "Chi Nhánh Đặt Hàng Kho Tổng",
+        "m_history": "Xem Lịch Sử Giao Dịch & Sơ Chế",
         "m_guide": "Hướng Dẫn Sử Dụng",
         "total_items": "Tổng số mặt hàng",
         "low_stock_warn": "Cảnh báo tồn kho thấp",
         "total_branches": "Tổng số chi nhánh hoạt động",
         "main_stock_table": "Bảng Tồn Kho Kho Tổng (Main Stock)",
-        "guide_content": """### Hướng Dẫn Sử Dụng Hệ Thống
-* **Quản trị viên (Admin):** Toàn quyền quản lý kho tổng, kho chi nhánh, nhập hàng, thêm sản phẩm, duyệt đơn và phân bổ cấp hàng.
-* **Chi nhánh (Branch):** Quản lý kho nội bộ riêng, tự thêm sản phẩm mua ngoài, sơ chế hao hụt, chuyển hàng nội bộ và đặt hàng từ kho tổng."""
+        "guide_content": """### 📖 Sổ Tay Hướng Dẫn Sử Dụng Hệ Thống Kho & Chuỗi
+
+#### 1. 📊 Tổng Quan & Cảnh Báo Kho (Overview)
+* **Mục đích:** Xem nhanh tổng số lượng mặt hàng, các sản phẩm đang có nguy cơ hết hàng (tồn kho thấp $\le 5$) và số lượng chi nhánh.
+* **Cần làm gì:** Kiểm tra bảng tồn kho chính và bấm nút **Tải xuống bảng tồn kho tổng** để xuất file Excel báo cáo.
+
+#### 2. 📥 Nhập Hàng Kho Tổng (Main Stock Import)
+* **Mục đích:** Ghi nhận số lượng nguyên vật liệu mới nhập từ nhà cung cấp vào kho tổng.
+* **Cần làm gì:** Chọn đúng sản phẩm cần nhập, nhập số lượng thêm và điền tên nhà cung cấp, sau đó bấm **Xác Nhận Nhập Hàng**.
+
+#### 3. 📝 Sửa Tồn Kho Đầu Kỳ (Edit Opening Stock)
+* **Mục đích:** Điều chỉnh lại số lượng gốc ban đầu của sản phẩm.
+* **Cần làm gì:** Chỉ dành cho Admin khi kiểm kê kho. Bắt buộc nhập mật khẩu bảo mật (`264221`) để xác nhận thay đổi.
+
+#### 4. ➕ Thêm Sản Phẩm Mới (Add New Item)
+* **Mục đích:** Khai báo một mặt hàng mới vào hệ thống quản lý.
+* **Cần làm gì:** Nhập tên sản phẩm, chọn đơn vị tính, điền số lượng tồn đầu kỳ và nguồn cung cấp.
+
+#### 5. 🔪 Sơ Chế & Hao Hụt (Processing Log)
+* **Mục đích:** Quản lý quy trình chế biến nguyên liệu thô thành thành phẩm và ghi nhận phần hao hụt/phế phẩm.
+* **Cần làm gì:** Chọn ngày, mã lô, chọn nguyên liệu thô bị trừ kho, nhập số lượng dùng, tên thành phẩm, số lượng thu về và lượng hao hụt.
+
+#### 6. 🚚 Cấp Hàng Cho Chi Nhánh (Branch Distribution)
+* **Mục đích:** Phân bổ hàng hóa từ kho tổng xuống các chi nhánh.
+* **Cần làm gì:** Chọn chi nhánh nhận, chọn sản phẩm và số lượng tương ứng, hệ thống sẽ tự động trừ kho tổng và cộng vào kho chi nhánh.
+
+#### 7. 🏪 Kho Riêng Chi Nhánh (Branch Local Inventory)
+* **Mục đích:** Theo dõi số lượng tồn kho nội bộ tại từng chi nhánh.
+* **Cần làm gì:** Kiểm tra hàng tồn và bấm nút tải Excel tương ứng. Có thể tự thêm sản phẩm mua ngoài bằng cách mở phần mở rộng bên dưới.
+
+#### 8. 🔄 Chuyển Hàng Giữa Chi Nhánh (Inter-branch Transfer)
+* **Mục đích:** Ghi nhận việc điều chuyển hàng hóa nội bộ giữa các chi nhánh hoặc giữa chi nhánh với kho tổng.
+* **Cần làm gì:** Chọn đơn vị gửi, đơn vị nhận, điền tên nhân viên thực hiện và danh sách sản phẩm cần chuyển.
+
+#### 9. 📋 Chi Nhánh Đặt Hàng Kho Tổng (Order Request)
+* **Mục đích:** Cho phép chi nhánh gửi yêu cầu đặt hàng về kho tổng hoặc để Admin duyệt các đơn hàng.
+* **Cần làm gì:** Chi nhánh điền đơn đặt hàng gửi đi; Admin vào mục này để kiểm tra danh sách chờ duyệt từ các chi nhánh.
+
+#### 10. 📜 Xem Lịch Sử Giao Dịch & Sơ Chế (History)
+* **Mục đích:** Tra cứu lại toàn bộ nhật ký hoạt động cũ của hệ thống.
+* **Cần làm gì:** Chuyển qua lại giữa các tab (Cấp hàng, Sơ chế, Chuyển nội bộ) để xem báo cáo và bấm nút tải Excel tương ứng để lưu trữ."""
     },
     "en": {
         "login_title": "Restaurant Inventory & Chain Management Login",
@@ -115,14 +154,13 @@ LANG = {
         "m_branch_inv": "Branch Local Inventory",
         "m_transfer": "Inter-branch Transfer",
         "m_order": "Branch Order Request",
+        "m_history": "View Transaction & Processing History",
         "m_guide": "User Guide",
         "total_items": "Total Items",
         "low_stock_warn": "Low Stock Alerts",
         "total_branches": "Active Branches",
         "main_stock_table": "Main Inventory Stock Table",
-        "guide_content": """### User Guide
-* **Administrator (Admin):** Full control over main stock, branch inventories, imports, and distribution.
-* **Branch:** Manage local inventory, add local items, branch processing/waste log, internal transfers, and place orders."""
+        "guide_content": "### User Guide\n* **Administrator:** Full control over main stock, branch inventories, imports, and distribution.\n* **Branch:** Manage local inventory, add local items, branch processing/waste log, internal transfers, and place orders."
     },
     "hu": {
         "login_title": "Éttermi Készletkezelő Bejelentkezés",
@@ -141,14 +179,13 @@ LANG = {
         "m_branch_inv": "Egységek Saját Készlete",
         "m_transfer": "Egységek közötti átadás",
         "m_order": "Egységek Rendelése a Központból",
+        "m_history": "Tranzakció és Feldolgozási Előzmények",
         "m_guide": "Használati Útmutató",
         "total_items": "Összes termék",
         "low_stock_warn": "Alacsony készlet riasztás",
         "total_branches": "Aktív egységek",
         "main_stock_table": "Központi Készlet Táblázat",
-        "guide_content": """### Használati Útmutató
-* **Rendszergazda (Admin):** Teljes körű vezérlés a központi raktár, fiókkészletek és kiosztások felett.
-* **Egység (Branch):** Saját helyi készlet kezelése, saját tételek, feldolgozási és hulladék napló, belső átadások és rendelések."""
+        "guide_content": "### Használati Útmutató\n* **Admin:** Teljes körű vezérlés.\n* **Egység:** Saját helyi készlet kezelése."
     }
 }
 
@@ -323,6 +360,7 @@ if st.session_state.role == "Admin":
         T["m_branch_inv"]: "branch_inv",
         T["m_transfer"]: "transfer",
         order_menu_label: "order",
+        T["m_history"]: "history",
         T["m_guide"]: "guide"
     }
 else:
@@ -331,6 +369,7 @@ else:
         T["m_branch_inv"]: "branch_inv",
         T["m_transfer"]: "transfer",
         T["m_order"]: "order",
+        T["m_history"]: "history",
         T["m_guide"]: "guide"
     }
 
@@ -345,6 +384,8 @@ branch_data_dict = load_branch_data()
 
 if choice == "overview":
     st.subheader(T["m_overview"])
+    st.info("💡 **Mục này làm gì?** Xem nhanh tổng quan số lượng mặt hàng, các sản phẩm tồn kho thấp cần chú ý và thông tin chuỗi.")
+    
     total_items = len(main_stock_df)
     low_stock_items = len(main_stock_df[main_stock_df["ClosingStock"] <= 5])
     
@@ -360,8 +401,7 @@ if choice == "overview":
     st.markdown(f"### {T['main_stock_table']}")
     st.dataframe(main_stock_df, use_container_width=True)
 
-    # --- NÚT TẢI EXCEL CHO BẢNG TỔNG QUAN ---
-    st.markdown("### 📥 Tải Báo Cáo Tổng Kết")
+    # Nút tải Excel tổng quan kho tổng
     output = io.BytesIO()
     with pd.ExcelWriter(output, engine='openpyxl') as writer:
         main_stock_df.to_excel(writer, sheet_name='Tong_Ket_Kho_Tong', index=False)
@@ -377,6 +417,8 @@ if choice == "overview":
 
 elif choice == "import":
     st.subheader(T["m_import"])
+    st.info("💡 **Mục này làm gì?** Ghi nhận số lượng nguyên vật liệu mới nhập từ nhà cung cấp vào kho tổng.")
+    
     with st.form("import_form"):
         item_list = main_stock_df["ItemName"].tolist() if not main_stock_df.empty else []
         selected_item = st.selectbox("Chọn sản phẩm cần nhập:", item_list)
@@ -394,6 +436,8 @@ elif choice == "import":
 
 elif choice == "edit":
     st.subheader(T["m_edit"])
+    st.info("💡 **Mục này làm gì?** Điều chỉnh lại tồn kho đầu kỳ của sản phẩm (Dành riêng cho Admin, yêu cầu mật khẩu bảo mật).")
+    
     with st.form("edit_stock_form"):
         item_list = main_stock_df["ItemName"].tolist() if not main_stock_df.empty else []
         selected_item = st.selectbox("Chọn sản phẩm cần sửa:", item_list)
@@ -413,6 +457,8 @@ elif choice == "edit":
 
 elif choice == "add":
     st.subheader(T["m_add"])
+    st.info("💡 **Mục này làm gì?** Khai báo sản phẩm mới vào danh mục quản lý của kho tổng.")
+    
     auto_id = f"SP{len(main_stock_df)+1:03d}" if not main_stock_df.empty else "SP001"
     with st.form("add_item_form"):
         new_id = st.text_input("Mã sản phẩm (Tự động):", value=auto_id, disabled=True)
@@ -434,6 +480,8 @@ elif choice == "add":
 
 elif choice == "process":
     st.subheader(T["m_process"])
+    st.info("💡 **Mục này làm gì?** Ghi nhận quá trình sơ chế nguyên liệu thô thành thành phẩm và hao hụt phát sinh tại kho tổng.")
+    
     with st.form("process_form"):
         p_date = st.date_input("Ngày sơ chế:", datetime.now())
         p_batch = st.text_input("Mã lô:", value=f"BATCH-{datetime.now().strftime('%Y%m%d')}")
@@ -461,6 +509,8 @@ elif choice == "process":
 
 elif choice == "distribute":
     st.subheader(T["m_distribute"])
+    st.info("💡 **Mục này làm gì?** Phân bổ và cấp phát hàng hóa từ kho tổng xuống các chi nhánh trong hệ thống.")
+    
     with st.form("distribute_form"):
         d_branch = st.selectbox("Chọn chi nhánh nhận hàng:", BRANCH_LIST)
         item_list_dist = main_stock_df["ItemName"].tolist() if not main_stock_df.empty else []
@@ -530,6 +580,8 @@ elif choice == "distribute":
 
 elif choice == "branch_inv":
     st.subheader(T["m_branch_inv"])
+    st.info("💡 **Mục này làm gì?** Quản lý số lượng tồn kho nội bộ tại từng chi nhánh cụ thể.")
+    
     if st.session_state.role == "Admin":
         active_branch = st.selectbox("Chọn chi nhánh để quản lý kho:", BRANCH_LIST)
     else:
@@ -576,6 +628,8 @@ elif choice == "branch_inv":
 
 elif choice == "transfer":
     st.subheader(T["m_transfer"])
+    st.info("💡 **Mục này làm gì?** Ghi nhận hoạt động điều chuyển hàng hóa qua lại giữa các đơn vị nội bộ.")
+    
     transfer_units = BRANCH_LIST + ["Kho Tổng"]
     with st.form("transfer_form"):
         col_f1, col_f2 = st.columns(2)
@@ -631,6 +685,8 @@ elif choice == "transfer":
 
 elif choice.startswith("🔴") or choice == "order":
     st.subheader(T["m_order"])
+    st.info("💡 **Mục này làm gì?** Quản lý các phiếu đặt hàng từ chi nhánh gửi về kho tổng để xét duyệt.")
+    
     if st.session_state.role == "Branch":
         st.markdown(f"Giao diện đặt hàng cho chi nhánh: **{st.session_state.branch_name}**")
         with st.form("branch_order_form"):
@@ -657,6 +713,96 @@ elif choice.startswith("🔴") or choice == "order":
         if os.path.exists(ORDER_FILE):
             ord_df = pd.read_csv(ORDER_FILE)
             st.dataframe(ord_df, use_container_width=True)
+
+elif choice == "history":
+    st.subheader(T["m_history"])
+    st.info("💡 **Mục này làm gì?** Xem lại toàn bộ nhật ký giao dịch, cấp hàng, sơ chế và chuyển nội bộ kèm theo tùy chọn tải Excel.")
+    
+    tab1, tab2, tab3 = st.tabs([
+        "📦 Lịch Sử Cấp Hàng Kho Tổng", 
+        "🔪 Lịch Sử Sơ Chế & Hao Hụt", 
+        "🔄 Lịch Sử Chuyển Nội Bộ"
+    ])
+    
+    with tab1:
+        st.markdown("### Lịch sử cấp hàng cho các chi nhánh")
+        if os.path.exists(EXPORT_FILE):
+            df_exp = pd.read_csv(EXPORT_FILE)
+            if st.session_state.role == "Branch":
+                df_exp = df_exp[df_exp["Branch"] == st.session_state.branch_name]
+            st.dataframe(df_exp, use_container_width=True)
+            
+            if not df_exp.empty:
+                out_exp = io.BytesIO()
+                with pd.ExcelWriter(out_exp, engine='openpyxl') as writer:
+                    df_exp.to_excel(writer, sheet_name='LichSuCapHang', index=False)
+                st.download_button(
+                    label="📥 Tải xuống lịch sử cấp hàng (Excel)",
+                    data=out_exp.getvalue(),
+                    file_name=f"Lich_Su_Cap_Hang_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+        else:
+            st.info("Chưa có dữ liệu lịch sử cấp hàng.")
+
+    with tab2:
+        st.markdown("### Lịch sử sơ chế nguyên liệu & hao hụt")
+        out_proc = io.BytesIO()
+        has_proc_data = False
+        
+        with pd.ExcelWriter(out_proc, engine='openpyxl') as proc_writer:
+            if os.path.exists(BRANCH_PROC_FILE):
+                df_b_proc = pd.read_csv(BRANCH_PROC_FILE)
+                if st.session_state.role == "Branch":
+                    df_b_proc = df_b_proc[df_b_proc["Branch"] == st.session_state.branch_name]
+                
+                if not df_b_proc.empty:
+                    st.markdown("#### Sơ chế tại các Chi nhánh")
+                    st.dataframe(df_b_proc, use_container_width=True)
+                    df_b_proc.to_excel(proc_writer, sheet_name='SoChe_ChiNhanh', index=False)
+                    has_proc_data = True
+                
+            if st.session_state.role == "Admin" and os.path.exists(DATA_FILE):
+                try:
+                    df_main_proc = pd.read_excel(DATA_FILE, sheet_name="ProcessingLog")
+                    if not df_main_proc.empty:
+                        st.markdown("#### Sơ chế tại Kho Tổng")
+                        st.dataframe(df_main_proc, use_container_width=True)
+                        df_main_proc.to_excel(proc_writer, sheet_name='SoChe_KhoTong', index=False)
+                        has_proc_data = True
+                except:
+                    pass
+
+        if has_proc_data:
+            st.download_button(
+                label="📥 Tải xuống lịch sử sơ chế & hao hụt (Excel)",
+                data=out_proc.getvalue(),
+                file_name=f"Lich_Su_So_Che_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+            )
+        else:
+            st.info("Chưa có dữ liệu lịch sử sơ chế.")
+
+    with tab3:
+        st.markdown("### Lịch sử chuyển hàng nội bộ")
+        if os.path.exists(TRANSFER_FILE):
+            df_trans = pd.read_csv(TRANSFER_FILE)
+            if st.session_state.role == "Branch":
+                df_trans = df_trans[(df_trans["FromBranch"] == st.session_state.branch_name) | (df_trans["ToBranch"] == st.session_state.branch_name)]
+            st.dataframe(df_trans, use_container_width=True)
+            
+            if not df_trans.empty:
+                out_trans = io.BytesIO()
+                with pd.ExcelWriter(out_trans, engine='openpyxl') as writer:
+                    df_trans.to_excel(writer, sheet_name='LichSuChuyenNoiBo', index=False)
+                st.download_button(
+                    label="📥 Tải xuống lịch sử chuyển hàng (Excel)",
+                    data=out_trans.getvalue(),
+                    file_name=f"Lich_Su_Chuyen_Hang_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                )
+        else:
+            st.info("Chưa có dữ liệu lịch sử chuyển hàng nội bộ.")
 
 elif choice == "guide":
     st.subheader(T["m_guide"])
