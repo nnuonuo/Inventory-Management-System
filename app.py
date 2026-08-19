@@ -919,3 +919,69 @@ elif choice == "history":
 
 elif choice == "guide":
     st.markdown(T["guide_content"])
+    elif choice == "history":
+    # Kiểm tra nếu role không phải là Admin thì thông báo lỗi hoặc từ chối truy cập
+    if st.session_state.get("role") != "Admin":
+        st.error("🚫 Bạn không có quyền truy cập vào mục lịch sử này. Khu vực này chỉ dành cho Admin.")
+    else:
+        # Toàn bộ code lịch sử giữ nguyên ở đây
+        st.subheader(T["m_history"])
+        st.info(T["tip_history"])
+        
+        tab1, tab2, tab3 = st.tabs(["Cấp hàng chi nhánh", "Sơ chế kho tổng", "Chuyển nội bộ"])
+        
+        with tab1:
+            st.markdown("### Lịch sử cấp hàng cho chi nhánh")
+            if os.path.exists(EXPORT_FILE):
+                df_export = pd.read_csv(EXPORT_FILE)
+                st.dataframe(df_export, use_container_width=True)
+                
+                output_export = io.BytesIO()
+                with pd.ExcelWriter(output_export, engine='openpyxl') as writer:
+                    df_export.to_excel(writer, sheet_name='LichSuCapHang', index=False)
+                st.download_button(
+                    label="📥 Tải xuống lịch sử cấp hàng (Excel)",
+                    data=output_export.getvalue(),
+                    file_name=f"Lich_Su_Cap_Hang_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    key="btn_dl_export"
+                )
+            else:
+                st.warning("Chưa có dữ liệu lịch sử cấp hàng.")
+
+        with tab2:
+            st.markdown("### Nhật ký sơ chế & hao hụt")
+            if not processing_df.empty:
+                st.dataframe(processing_df, use_container_width=True)
+                
+                output_proc = io.BytesIO()
+                with pd.ExcelWriter(output_proc, engine='openpyxl') as writer:
+                    processing_df.to_excel(writer, sheet_name='NhatKySoChe', index=False)
+                st.download_button(
+                    label="📥 Tải xuống nhật ký sơ chế (Excel)",
+                    data=output_proc.getvalue(),
+                    file_name=f"Nhat_Ky_So_Che_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    key="btn_dl_proc"
+                )
+            else:
+                st.warning("Chưa có dữ liệu sơ chế.")
+
+        with tab3:
+            st.markdown("### Lịch sử chuyển hàng giữa các chi nhánh")
+            if os.path.exists(TRANSFER_FILE):
+                df_transfer = pd.read_csv(TRANSFER_FILE)
+                st.dataframe(df_transfer, use_container_width=True)
+                
+                output_trans = io.BytesIO()
+                with pd.ExcelWriter(output_trans, engine='openpyxl') as writer:
+                    df_transfer.to_excel(writer, sheet_name='LichSuChuyenNoiBo', index=False)
+                st.download_button(
+                    label="📥 Tải xuống lịch sử chuyển nội bộ (Excel)",
+                    data=output_trans.getvalue(),
+                    file_name=f"Lich_Su_Chuyen_Noi_Bo_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    key="btn_dl_trans"
+                )
+            else:
+                st.warning("Chưa có dữ liệu chuyển hàng.")
