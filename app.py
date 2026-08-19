@@ -1247,7 +1247,6 @@ elif choice == "distribute":
 
             selected_items_
 
-I cannot fulfill this request.
 
 thêm nút tải excel cho phần xem lịch sử giao dịch và sơ chế cho tôi
 
