@@ -473,15 +473,17 @@ if st.session_state.role == "Admin":
     }
 else:
     menu_options = {
-        T["m_overview"]: "overview",
         T["m_branch_inv"]: "branch_inv",
         T["m_transfer"]: "transfer",
         T["m_order"]: "order",
-        T["m_history"]: "history",
         T["m_guide"]: "guide"
     }
 
-selected_menu_label = st.sidebar.radio("Chọn chức năng:", list(menu_options.keys()))
+selected_menu_label = st.sidebar.radio(
+    "",
+    list(menu_options.keys()),
+    label_visibility="collapsed"
+)
 choice = menu_options[selected_menu_label]
 
 st.title(T["title"])
@@ -821,171 +823,88 @@ elif choice.startswith("🔴") or choice == "order":
             st.dataframe(ord_df, use_container_width=True)
 
 elif choice == "history":
-    st.subheader(T["m_history"])
-    st.info(T["tip_history"])
-    
-    tab1, tab2, tab3 = st.tabs([
-        "📦 Lịch Sử Cấp Hàng Kho Tổng", 
-        "🔪 Lịch Sử Sơ Chế & Hao Hụt", 
-        "🔄 Lịch Sử Chuyển Nội Bộ"
-    ])
-    
-    with tab1:
-        st.markdown("### Lịch sử cấp hàng cho các chi nhánh")
-        if os.path.exists(EXPORT_FILE):
-            df_exp = pd.read_csv(EXPORT_FILE)
-            if st.session_state.role == "Branch":
-                df_exp = df_exp[df_exp["Branch"] == st.session_state.branch_name]
-            st.dataframe(df_exp, use_container_width=True)
-            
-            if not df_exp.empty:
-                out_exp = io.BytesIO()
-                with pd.ExcelWriter(out_exp, engine='openpyxl') as writer:
-                    df_exp.to_excel(writer, sheet_name='LichSuCapHang', index=False)
-                st.download_button(
-                    label="📥 Tải xuống lịch sử cấp hàng (Excel)",
-                    data=out_exp.getvalue(),
-                    file_name=f"Lich_Su_Cap_Hang_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                )
-        else:
-            st.info("Chưa có dữ liệu lịch sử cấp hàng.")
+    # Lịch sử giao dịch & sơ chế chỉ dành cho Admin.
+    if st.session_state.role != "Admin":
+        st.error("🚫 Bạn không có quyền truy cập vào mục lịch sử này. Khu vực này chỉ dành cho Admin.")
+    else:
+        st.subheader(T["m_history"])
+        st.info(T["tip_history"])
 
-    with tab2:
-        st.markdown("### Lịch sử sơ chế nguyên liệu & hao hụt")
-        has_proc_data = False
-        df_b_proc = pd.DataFrame()
-        df_main_proc = pd.DataFrame()
+        tab1, tab2, tab3 = st.tabs([
+            "📦 Lịch Sử Cấp Hàng Kho Tổng",
+            "🔪 Lịch Sử Sơ Chế & Hao Hụt",
+            "🔄 Lịch Sử Chuyển Nội Bộ"
+        ])
 
-        if os.path.exists(BRANCH_PROC_FILE):
-            try:
-                df_b_proc = pd.read_csv(BRANCH_PROC_FILE)
-                if st.session_state.role == "Branch":
-                    df_b_proc = df_b_proc[df_b_proc["Branch"] == st.session_state.branch_name]
-                if not df_b_proc.empty:
-                    st.markdown("#### Sơ chế tại các Chi nhánh")
-                    st.dataframe(df_b_proc, use_container_width=True)
-                    has_proc_data = True
-            except:
-                pass
-            
-        if st.session_state.role == "Admin" and os.path.exists(DATA_FILE):
-            try:
-                df_main_proc = pd.read_excel(DATA_FILE, sheet_name="ProcessingLog")
-                if not df_main_proc.empty:
-                    st.markdown("#### Sơ chế tại Kho Tổng")
-                    st.dataframe(df_main_proc, use_container_width=True)
-                    has_proc_data = True
-            except:
-                pass
+        with tab1:
+            st.markdown("### Lịch sử cấp hàng cho các chi nhánh")
+            if os.path.exists(EXPORT_FILE):
+                df_exp = pd.read_csv(EXPORT_FILE)
+                st.dataframe(df_exp, use_container_width=True)
 
-        if has_proc_data:
-            out_proc = io.BytesIO()
-            with pd.ExcelWriter(out_proc, engine='openpyxl') as proc_writer:
-                if not df_b_proc.empty:
-                    df_b_proc.to_excel(proc_writer, sheet_name='SoChe_ChiNhanh', index=False)
-                if not df_main_proc.empty:
-                    df_main_proc.to_excel(proc_writer, sheet_name='SoChe_KhoTong', index=False)
-            
-            st.download_button(
-                label="📥 Tải xuống lịch sử sơ chế & hao hụt (Excel)",
-                data=out_proc.getvalue(),
-                file_name=f"Lich_Su_So_Che_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
-                mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-            )
-        else:
-            st.info("Chưa có dữ liệu lịch sử sơ chế.")
+                if not df_exp.empty:
+                    out_exp = io.BytesIO()
+                    with pd.ExcelWriter(out_exp, engine='openpyxl') as writer:
+                        df_exp.to_excel(writer, sheet_name='LichSuCapHang', index=False)
+                    st.download_button(
+                        label="📥 Tải xuống lịch sử cấp hàng (Excel)",
+                        data=out_exp.getvalue(),
+                        file_name=f"Lich_Su_Cap_Hang_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+            else:
+                st.info("Chưa có dữ liệu lịch sử cấp hàng.")
 
-    with tab3:
-        st.markdown("### Lịch sử chuyển hàng nội bộ")
-        if os.path.exists(TRANSFER_FILE):
-            df_trans = pd.read_csv(TRANSFER_FILE)
-            if st.session_state.role == "Branch":
-                df_trans = df_trans[(df_trans["FromBranch"] == st.session_state.branch_name) | (df_trans["ToBranch"] == st.session_state.branch_name)]
-            st.dataframe(df_trans, use_container_width=True)
-            
-            if not df_trans.empty:
-                out_trans = io.BytesIO()
-                with pd.ExcelWriter(out_trans, engine='openpyxl') as writer:
-                    df_trans.to_excel(writer, sheet_name='LichSuChuyenNoiBo', index=False)
-                st.download_button(
-                    label="📥 Tải xuống lịch sử chuyển hàng (Excel)",
-                    data=out_trans.getvalue(),
-                    file_name=f"Lich_Su_Chuyen_Hang_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-                )
-        else:
-            st.info("Chưa có dữ liệu lịch sử chuyển hàng nội bộ.")
+        with tab2:
+            st.markdown("### Lịch sử sơ chế nguyên liệu & hao hụt")
+
+            # Lịch sử sơ chế kho tổng: chỉ Admin mới nhìn thấy.
+            if os.path.exists(DATA_FILE):
+                try:
+                    df_main_proc = pd.read_excel(DATA_FILE, sheet_name="ProcessingLog")
+                    if not df_main_proc.empty:
+                        st.dataframe(df_main_proc, use_container_width=True)
+
+                        out_proc = io.BytesIO()
+                        with pd.ExcelWriter(out_proc, engine='openpyxl') as proc_writer:
+                            df_main_proc.to_excel(proc_writer, sheet_name='SoChe_KhoTong', index=False)
+
+                        st.download_button(
+                            label="📥 Tải xuống lịch sử sơ chế & hao hụt (Excel)",
+                            data=out_proc.getvalue(),
+                            file_name=f"Lich_Su_So_Che_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                            mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        )
+                    else:
+                        st.info("Chưa có dữ liệu lịch sử sơ chế.")
+                except Exception:
+                    st.info("Chưa có dữ liệu lịch sử sơ chế.")
+            else:
+                st.info("Chưa có dữ liệu lịch sử sơ chế.")
+
+        with tab3:
+            st.markdown("### Lịch sử chuyển hàng nội bộ")
+            if os.path.exists(TRANSFER_FILE):
+                df_trans = pd.read_csv(TRANSFER_FILE)
+                st.dataframe(df_trans, use_container_width=True)
+
+                if not df_trans.empty:
+                    out_trans = io.BytesIO()
+                    with pd.ExcelWriter(out_trans, engine='openpyxl') as writer:
+                        df_trans.to_excel(writer, sheet_name='LichSuChuyenNoiBo', index=False)
+                    st.download_button(
+                        label="📥 Tải xuống lịch sử chuyển hàng (Excel)",
+                        data=out_trans.getvalue(),
+                        file_name=f"Lich_Su_Chuyen_Hang_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
+                        mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    )
+            else:
+                st.info("Chưa có dữ liệu lịch sử chuyển hàng nội bộ.")
 
 elif choice == "guide":
     st.markdown(T["guide_content"])
 
 
-
-elif choice == "history":
-    if st.session_state.get("role") != "Admin":
-        st.error("🚫 Bạn không có quyền truy cập vào mục lịch sử này. Khu vực này chỉ dành cho Admin.")
-    else:
-        st.subheader(T["m_history"])
-        st.info(T["tip_history"])
-        
-        tab1, tab2, tab3 = st.tabs(["Cấp hàng chi nhánh", "Sơ chế kho tổng", "Chuyển nội bộ"])
-        
-        with tab1:
-            st.markdown("### Lịch sử cấp hàng cho chi nhánh")
-            if os.path.exists(EXPORT_FILE):
-                df_export = pd.read_csv(EXPORT_FILE)
-                st.dataframe(df_export, use_container_width=True)
-                
-                output_export = io.BytesIO()
-                with pd.ExcelWriter(output_export, engine='openpyxl') as writer:
-                    df_export.to_excel(writer, sheet_name='LichSuCapHang', index=False)
-                st.download_button(
-                    label="📥 Tải xuống lịch sử cấp hàng (Excel)",
-                    data=output_export.getvalue(),
-                    file_name=f"Lich_Su_Cap_Hang_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    key="btn_dl_export"
-                )
-            else:
-                st.warning("Chưa có dữ liệu lịch sử cấp hàng.")
-
-        with tab2:
-            st.markdown("### Nhật ký sơ chế & hao hụt")
-            if not processing_df.empty:
-                st.dataframe(processing_df, use_container_width=True)
-                
-                output_proc = io.BytesIO()
-                with pd.ExcelWriter(output_proc, engine='openpyxl') as writer:
-                    processing_df.to_excel(writer, sheet_name='NhatKySoChe', index=False)
-                st.download_button(
-                    label="📥 Tải xuống nhật ký sơ chế (Excel)",
-                    data=output_proc.getvalue(),
-                    file_name=f"Nhat_Ky_So_Che_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    key="btn_dl_proc"
-                )
-            else:
-                st.warning("Chưa có dữ liệu sơ chế.")
-
-        with tab3:
-            st.markdown("### Lịch sử chuyển hàng giữa các chi nhánh")
-            if os.path.exists(TRANSFER_FILE):
-                df_transfer = pd.read_csv(TRANSFER_FILE)
-                st.dataframe(df_transfer, use_container_width=True)
-                
-                output_trans = io.BytesIO()
-                with pd.ExcelWriter(output_trans, engine='openpyxl') as writer:
-                    df_transfer.to_excel(writer, sheet_name='LichSuChuyenNoiBo', index=False)
-                st.download_button(
-                    label="📥 Tải xuống lịch sử chuyển nội bộ (Excel)",
-                    data=output_trans.getvalue(),
-                    file_name=f"Lich_Su_Chuyen_Noi_Bo_{datetime.now().strftime('%Y%m%d_%H%M%S')}.xlsx",
-                    mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-                    key="btn_dl_trans"
-                )
-            else:
-                st.warning("Chưa có dữ liệu chuyển hàng.")
 
 if st.session_state.get("role") == "Admin":
     menu_options = ["Tổng Quan", "Kho Chi Nhánh", "Chuyển Hàng", "Lịch Sử"]
