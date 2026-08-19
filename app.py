@@ -55,7 +55,7 @@ BRANCH_PROC_FILE = "branch_processing_history.csv"
 SECRET_ACTION_PWD = "264221"
 
 BRANCH_LIST = ["Shibuya", "Little Geisha Baross", "Little Geisha Corvin", "URBN.Station", "Matchy"]
-UNIT_LIST = ["Kg", "g", "L", "ml", "Can", "Chai", "Thùng", "Gói", "Hộp", "Cái"]
+UNIT_LIST = ["Kg", "g", "L", "ml", "Can", "Chai", "Thùng", "Gói", "Hộp", "Cái", "db"]
 
 if "passwords" not in st.session_state:
     st.session_state.passwords = {
@@ -481,7 +481,6 @@ order_menu_label = T["m_order"]
 if st.session_state.role == "Admin" and pending_order_count > 0:
     order_menu_label = f"🔴 {T['m_order']} ({pending_order_count})"
 
-# Phân quyền danh sách menu cho Admin và Branch
 if st.session_state.role == "Admin":
     menu_options = {
         T["m_overview"]: "overview",
